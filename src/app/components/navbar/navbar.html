@@ -1,1 +1,61 @@
-<p>navbar works!</p>
+<nav
+  class="bg-gradient-to-r from-[#003B6F] via-[#005B96] to-[#00A6D6] text-white shadow-lg fixed top-0 left-0 w-full z-50 backdrop-blur-lg">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center h-16">
+
+      <a routerLink="/" class="text-2xl font-bold tracking-wide hover:scale-105 transition-transform duration-300">
+        CiberNext
+      </a>
+
+      <button (click)="isMenuOpen = !isMenuOpen"
+              class="md:hidden focus:outline-none hover:scale-105 transition-transform duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+
+      <div class="hidden md:flex space-x-6 items-center font-medium">
+        <a routerLink="/" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>
+
+        @if (isLoggedIn()) {
+          <a routerLink="/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>
+          <a routerLink="/update/user" class="hover:text-yellow-200 transition-colors duration-300">Actualizar Cuenta</a>
+          <a routerLink="/update/password" class="hover:text-yellow-200 transition-colors duration-300">Cambiar contraseña</a>
+          <button (click)="logout()"
+                  class="px-4 py-1 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-md">
+            Cerrar Sesión
+          </button>
+        } @else {
+          <a routerLink="/auth/register" class="hover:text-yellow-200 transition-colors duration-300">Registrarse</a>
+          <a routerLink="/auth/login" class="hover:text-yellow-200 transition-colors duration-300">Iniciar Sesión</a>
+        }
+      </div>
+    </div>
+
+    <div class="md:hidden overflow-hidden transition-all duration-300 ease-in-out"
+         [class.max-h-0]="!isMenuOpen"
+         [class.max-h-96]="isMenuOpen">
+      <div
+        class="flex flex-col space-y-2 mt-3 pb-4 border-t border-white/20 pt-3 font-medium transform transition-all duration-300 ease-in-out"
+        [class.opacity-0]="!isMenuOpen"
+        [class.opacity-100]="isMenuOpen"
+        [class.translate-y-[-10px]]="!isMenuOpen"
+        [class.translate-y-0]="isMenuOpen">
+        <a routerLink="/" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>
+
+        @if (isLoggedIn()) {
+          <a routerLink="/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>
+          <a routerLink="/update/user" class="hover:text-yellow-200 transition-colors duration-300">Actualizar Cuenta</a>
+          <a routerLink="/update/password" class="hover:text-yellow-200 transition-colors duration-300">Cambiar contraseña</a>
+          <button (click)="logout()"
+                  class="px-4 py-1 rounded-lg bg-gradient-to-r from-red-500 to-pink-500 hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-md">
+            Cerrar Sesión
+          </button>
+        } @else {
+          <a routerLink="/register" class="hover:text-yellow-200 transition-colors duration-300">Registrarse</a>
+          <a routerLink="/login" class="hover:text-yellow-200 transition-colors duration-300">Iniciar Sesión</a>
+        }
+      </div>
+    </div>
+  </div>
+</nav>
