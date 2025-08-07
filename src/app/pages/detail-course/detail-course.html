@@ -1,0 +1,76 @@
+<header class="bg-[#002855] text-white p-4 flex items-center justify-between">
+  <div class="flex items-center">
+    <a routerLink="/" class="text-white text-xl font-bold">Cibernext</a>
+    <h1 class="ml-4 text-xl">{{ curso.titulo }}</h1>
+  </div>
+  <div class="flex items-center space-x-4">
+    <button class="flex items-center space-x-2">
+      <span class="text-sm">Tu progreso</span>
+      <span class="bg-white text-[#002855] font-bold rounded-full h-6 w-6 flex items-center justify-center">0%</span>
+    </button>
+    <button class="bg-white text-[#002855] px-4 py-2 rounded font-semibold">
+      Compartir
+    </button>
+    <div class="relative">
+      <button class="p-2 rounded-full hover:bg-gray-700">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
+
+  <div class="flex-1 p-8">
+    <div class="bg-black rounded-lg overflow-hidden mb-6">
+      <div class="flex-1 p-8">
+
+        <div class="bg-black rounded-lg overflow-hidden mb-6 h-[28rem]">
+          <iframe class="w-full h-full" src="https://www.youtube.com/embed/W4TaBuRSsRU?si=Q1HtHFuYdvMGoRW6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bg-white rounded-lg p-6 shadow-md">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <a routerLink="./descripcion"
+             class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">Descripción general</a>
+          <a routerLink="./preguntas-respuestas"
+             class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">Preguntas y respuestas</a>
+        </nav>
+      </div>
+      <div class="mt-6">
+        hola
+        <router-outlet/>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full lg:w-96 bg-white border-l border-gray-200 shadow-lg p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold">Contenido del curso</h3>
+    </div>
+    <div class="space-y-2">
+      <details *ngFor="let seccion of secciones" class="group" [attr.open]="seccion.abierta ? '' : null">
+        <summary class="flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 cursor-pointer rounded-lg">
+          <span class="font-semibold text-gray-800">{{ seccion.titulo }}</span>
+          <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </summary>
+        <div class="p-4 bg-white border-l-2 border-gray-200">
+          <ul class="space-y-2">
+            <li *ngFor="let clase of seccion.clases" class="flex items-center text-gray-600">
+              <svg class="w-5 h-5 text-purple-600 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
+              <span>{{ clase.titulo }} - {{ clase.duracion }}</span>
+            </li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</main>

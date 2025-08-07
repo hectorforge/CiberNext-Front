@@ -4,13 +4,15 @@ import {Login} from './pages/login/login';
 import {Register} from './pages/register/register';
 import {MainLayout} from './layouts/main-layout/main-layout';
 import {AuthLayout} from './layouts/ayuth-layout/auth-layout.component';
+import {DetailCourse} from './pages/detail-course/detail-course';
 
 export const routes: Routes = [
   {
     path: 'home',
     component: MainLayout,
     children: [
-      { path: '', component: Home }
+      { path: '', component: Home },
+      { path: 'detail/course', component: DetailCourse },
     ]
   },
 
