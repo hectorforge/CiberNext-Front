@@ -39,7 +39,7 @@ export class Login {
       next: (res) => {
         console.log('Login exitoso:', res);
         this.loading = false;
-        this.router.navigate(['/inicio']);
+        this.router.navigate(['/home']);
 
       },
       error: (err) => {
