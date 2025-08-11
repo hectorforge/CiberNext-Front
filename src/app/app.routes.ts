@@ -11,6 +11,7 @@ import { Dashboard } from './pages/admin/dashboard/dashboard';
 import { Unauthorized } from './pages/unauthorized/unauthorized';
 import { Contact } from './pages/contact/contact';
 import { Perfil } from './pages/perfil/perfil';
+import { ChangePassword } from './pages/change-password/change-password';
 
 export const routes: Routes = [
   // Rutas para navegar en la pagina del estudiante (ya logeado xd)
@@ -40,6 +41,7 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: Login },
       { path: 'register', component: Register },
+      {path: 'change-password', component: ChangePassword}
     ]
   },
 
