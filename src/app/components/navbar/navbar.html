@@ -18,7 +18,7 @@
         <a routerLink="/" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>
 
         @if (isLoggedIn()) {
-          <a routerLink="/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>
+          <a routerLink="/home/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>
           <a routerLink="/update/user" class="hover:text-yellow-200 transition-colors duration-300">Actualizar Cuenta</a>
           <a routerLink="/update/password" class="hover:text-yellow-200 transition-colors duration-300">Cambiar contraseña</a>
           <button (click)="logout()"
@@ -44,7 +44,7 @@
         <a routerLink="/" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>
 
         @if (isLoggedIn()) {
-          <a routerLink="/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>
+          <a routerLink="/home/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>
           <a routerLink="/update/user" class="hover:text-yellow-200 transition-colors duration-300">Actualizar Cuenta</a>
           <a routerLink="/update/password" class="hover:text-yellow-200 transition-colors duration-300">Cambiar contraseña</a>
           <button (click)="logout()"

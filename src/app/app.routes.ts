@@ -10,6 +10,7 @@ import { AdminLayout } from './layouts/admin-layout/admin-layout';
 import { Dashboard } from './pages/admin/dashboard/dashboard';
 import { Unauthorized } from './pages/unauthorized/unauthorized';
 import { Contact } from './pages/contact/contact';
+import { Perfil } from './pages/perfil/perfil';
 
 export const routes: Routes = [
   // Rutas para navegar en la pagina del estudiante (ya logeado xd)
@@ -18,6 +19,7 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
       { path: '', component: Home, canActivate: [userGuardGuard] },
+      {path: 'me', component: Perfil, canActivate: [userGuardGuard] },
       { path: 'detail/course', component: DetailCourse,canActivate: [userGuardGuard] },
     ]
   },

@@ -1,0 +1,14 @@
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow mt-20">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4">Mi Perfil</h2>
+
+  @if (usuario) {
+    <ul class="space-y-2">
+      <li><strong>Nombre:</strong> {{ usuario.nombre }}</li>
+      <li><strong>Apellido:</strong> {{ usuario.apellido }}</li>
+      <li><strong>Dni:</strong> {{ usuario.dni }}</li>
+      <li><strong>Roles:</strong> {{ rolesTexto }}</li>
+    </ul>
+  } @else {
+    <p class="text-gray-500">Cargando datos...</p>
+  }
+</div>
