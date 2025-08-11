@@ -14,14 +14,36 @@ export class Navbar {
   private authService = inject(AuthService);
   private cookieService = inject(CookieService);
 
-  isMenuOpen  = false;
+  usuario: any = null;
+  isMenuOpen = false;
+
+  ngOnInit(): void {
+    if (this.isLoggedIn()) {
+      this.authService.getProfile().subscribe({
+        next: (data) => {
+          this.usuario = data;
+        },
+        error: (err) => {
+          console.error('Error al obtener perfil:', err);
+        }
+      });
+    }
+  }
 
   isLoggedIn(): boolean {
     return this.cookieService.check('authToken');
   }
 
+  getFotoPerfil(): string {
+    return this.usuario?.fotoPerfil;
+  }
+
+  getNombreCompleto(): string {
+    return this.usuario ? `${this.usuario.nombre} ${this.usuario.apellido}` : '';
+  }
+
   toggleMenu(): void {
-    this.isMenuOpen  = !this.isMenuOpen;
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   logout(): void {
