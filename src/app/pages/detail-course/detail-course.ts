@@ -31,15 +31,11 @@ export class DetailCourse implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    // Aquí inicializarías tus variables con datos reales,
-    // quizás a través de un servicio que llama a una API.
-
-    // Datos de ejemplo para la maquetación:
     this.curso = {
       titulo: 'Spring Framework 6 & Spring Boot 3 desde cero a experto'
     };
 
-    this.videoUrl = 'https://www.youtube.com/embed/dQw4w9WgXcQ'; // URL del video
+    this.videoUrl = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
 
     this.secciones = [
       {

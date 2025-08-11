@@ -7,8 +7,7 @@ import {CommonModule} from '@angular/common';
 @Component({
   selector: 'app-navbar',
   imports: [CommonModule,RouterLink],
-  templateUrl: './navbar.html',
-  styleUrl: './navbar.css'
+  templateUrl: './navbar.html'
 })
 export class Navbar {
   private router = inject(Router);

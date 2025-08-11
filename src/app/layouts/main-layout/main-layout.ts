@@ -10,8 +10,7 @@ import {RouterOutlet} from '@angular/router';
     Footer,
     RouterOutlet
   ],
-  templateUrl: './main-layout.html',
-  styleUrl: './main-layout.css'
+  templateUrl: './main-layout.html'
 })
 export class MainLayout {
 
