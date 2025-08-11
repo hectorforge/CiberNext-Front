@@ -12,6 +12,7 @@ import { Unauthorized } from './pages/unauthorized/unauthorized';
 import { Contact } from './pages/contact/contact';
 import { Perfil } from './pages/perfil/perfil';
 import { ChangePassword } from './pages/change-password/change-password';
+import { UpdatePerfil } from './pages/update-perfil/update-perfil';
 
 export const routes: Routes = [
   // Rutas para navegar en la pagina del estudiante (ya logeado xd)
@@ -41,7 +42,8 @@ export const routes: Routes = [
     children: [
       { path: 'login', component: Login },
       { path: 'register', component: Register },
-      {path: 'change-password', component: ChangePassword}
+      {path: 'change-password', component: ChangePassword,canActivate: [userGuardGuard]},
+      {path: 'update-perfil', component: UpdatePerfil, canActivate: [userGuardGuard]}
     ]
   },
 

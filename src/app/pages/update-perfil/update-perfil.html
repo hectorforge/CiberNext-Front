@@ -1,0 +1,76 @@
+<div class="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
+  <form [formGroup]="form" (ngSubmit)="handleSubmit()"
+    class="bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-xl space-y-4 w-96"
+  >
+    <h2 class="text-2xl font-bold text-center text-gray-700">Actualizar Perfil</h2>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+      <input formControlName="nombre"
+        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:outline-none placeholder-gray-500"
+        placeholder="Tu nombre"
+      >
+      @if (form.get('nombre')?.touched && form.get('nombre')?.invalid) {
+        <p class="text-red-500 text-sm">{{ getErrorMessage('nombre') }}</p>
+      }
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+      <input formControlName="apellido"
+        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:outline-none placeholder-gray-500"
+        placeholder="Tu apellido"
+      >
+      @if (form.get('apellido')?.touched && form.get('apellido')?.invalid) {
+        <p class="text-red-500 text-sm">{{ getErrorMessage('apellido') }}</p>
+      }
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Dni</label>
+      <input formControlName="dni"
+        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:outline-none placeholder-gray-500"
+        placeholder="Tu Dni"
+      >
+      @if (form.get('dni')?.touched && form.get('dni')?.invalid) {
+        <p class="text-red-500 text-sm">{{ getErrorMessage('dni') }}</p>
+      }
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Foto</label>
+      <input formControlName="fotoPerfil"
+        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:outline-none placeholder-gray-500"
+        placeholder="foto.jpg"
+      >
+      @if (form.get('fotoPerfil')?.touched && form.get('fotoPerfil')?.invalid) {
+        <p class="text-red-500 text-sm">{{ getErrorMessage('fotoPerfil') }}</p>
+      }
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+      <input type="email" formControlName="email"
+        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:outline-none placeholder-gray-500"
+        placeholder="Tu correo"
+      >
+      @if (form.get('email')?.touched && form.get('email')?.invalid) {
+        <p class="text-red-500 text-sm">{{ getErrorMessage('email') }}</p>
+      }
+    </div>
+
+    @if (successMessage) {
+      <p class="text-green-500 text-sm">{{ successMessage }}</p>
+    }
+    @if (errorMessage) {
+      <p class="text-red-500 text-sm">{{ errorMessage }}</p>
+    }
+
+    <button
+      class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg shadow-md hover:opacity-90 active:scale-95 transition"
+      [disabled]="loading"
+    >
+      {{ loading ? 'Guardando...' : 'Guardar Cambios' }}
+    </button>
+  </form>
+</div>
