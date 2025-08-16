@@ -1,0 +1,17 @@
+<div [formGroup]="parentForm" class="form-row">
+    <select formControlName="pais" (change)="onCountryChange($any($event.target).value)" class="rounded-xl border border-gray-300 focus:ring-2 
+    focus:ring-purple-500 focus:outline-none placeholder-gray-400 shadow-xl">
+      <option [ngValue]="null" disabled>Seleccione un país</option>
+      <option *ngFor="let country of countries" [value]="country.code">
+        {{ country.flag }} {{ country.name }}
+      </option>
+    </select>
+  
+    <input
+      type="text"
+      class="rounded-xl border border-gray-300 focus:ring-2 
+      focus:ring-purple-500 focus:outline-none placeholder-gray-400 shadow-xl"
+      formControlName="numero"
+      placeholder="Número de teléfono"
+    />
+</div>

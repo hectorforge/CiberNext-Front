@@ -5,11 +5,12 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import countriesData from 'world-countries';
 import type { Country } from 'world-countries';
+import { PaisTelefono } from "../../components/pais-telefono/pais-telefono";
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, PaisTelefono],
   templateUrl: './register.html'
 })
 export class Register {
@@ -35,12 +36,22 @@ export class Register {
 
   handleSubmit(): void {
     if (this.registerForm.invalid) return;
-
+  
     const val = this.registerForm.value;
+  
+    const selectedCountry = this.countryList.find(
+      (c: any) => c.cca2 === val.pais
+    );
+  
+    const payload = {
+      ...val,
+      pais: selectedCountry?.name?.common || ''
+    };
 
+    console.log(this.registerForm.value);
 
     this.loading = true;
-    this.authService.register(this.registerForm.value).subscribe({
+    this.authService.register(payload).subscribe({
       next: (res) => {
         this.successMessage = res.message || 'Usuario registrado con éxito';
         this.errorMessage = '';
@@ -51,14 +62,10 @@ export class Register {
         this.errorMessage = err.error?.error || 'Error en el registro';
         this.loading = false;
         this.successMessage = '';
-
-        console.log(err);
-        console.log(this.registerForm.value);
-        console.log(this.registerForm.get('pais')?.value);
-        console.log(this.registerForm.get('pais')?.value?.["name"]["common"]);
       }
     });
   }
+  
 
   getErrorMessage(field: string): string {
     const control = this.registerForm.get(field);

@@ -1,0 +1,33 @@
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 0; 
+  }
+  
+  .form-row select,
+  .form-row input {
+    height: 40px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  
+  .form-row select {
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    min-width: 150px;
+    background: #fff;
+  }
+  
+
+  .form-row input {
+    border-radius: 0 8px 8px 0;
+    flex: 1; 
+  }
+  
+  .form-row select:focus,
+  .form-row input:focus {
+    border-color: #007bff;
+    z-index: 1;
+  }  

@@ -1,110 +1,101 @@
-<div class="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400">
-  <form [formGroup]="registerForm" (ngSubmit)="handleSubmit()"
-    class="bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-xl space-y-4 w-96"
+<div class="min-h-screen flex justify-center items-center bg-gradient-to-br from-blue-400 via-purple-400 to-pink-400 px-4">
+  <form 
+    [formGroup]="registerForm" 
+    (ngSubmit)="handleSubmit()"
+    class="bg-white/80 backdrop-blur-lg p-10 rounded-3xl shadow-2xl w-full max-w-4xl"
   >
-    <h2 class="text-2xl font-bold text-center text-gray-700">Registro de Usuario</h2>
+    <!-- Título -->
+    <h2 class="text-3xl font-extrabold text-center text-gray-800 mb-8">Registro de Usuario</h2>
 
-    <!-- Nombre -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-      <input type="text" formControlName="nombre" placeholder="Ingresa tu nombre"
-        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 
-               focus:ring-purple-500 focus:outline-none placeholder-gray-500">
-      @if (registerForm.get('nombre')?.touched && registerForm.get('nombre')?.invalid) {
-        <p class="text-red-500 text-sm">{{ getErrorMessage('nombre') }}</p>
-      }
-    </div>
+    <!-- Grid de 2 columnas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- Nombre -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+        <input type="text" formControlName="nombre" placeholder="Ingresa tu nombre"
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 
+                 focus:ring-purple-500 focus:outline-none placeholder-gray-400 shadow-xl">
+        @if (registerForm.get('nombre')?.touched && registerForm.get('nombre')?.invalid) {
+          <p class="text-red-500 text-sm">{{ getErrorMessage('nombre') }}</p>
+        }
+      </div>
 
-    <!-- Apellido -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
-      <input type="text" formControlName="apellido" placeholder="Ingresa tu apellido"
-        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 
-               focus:ring-purple-500 focus:outline-none placeholder-gray-500">
-      @if (registerForm.get('apellido')?.touched && registerForm.get('apellido')?.invalid) {
-        <p class="text-red-500 text-sm">{{ getErrorMessage('apellido') }}</p>
-      }
-    </div>
+      <!-- Apellido -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
+        <input type="text" formControlName="apellido" placeholder="Ingresa tu apellido"
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 
+                 focus:ring-purple-500 focus:outline-none placeholder-gray-400 shadow-xl">
+        @if (registerForm.get('apellido')?.touched && registerForm.get('apellido')?.invalid) {
+          <p class="text-red-500 text-sm">{{ getErrorMessage('apellido') }}</p>
+        }
+      </div>
 
-    <!-- DNI -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">DNI</label>
-      <input type="text" formControlName="dni" placeholder="Ingresa tu DNI"
-        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 
-               focus:ring-purple-500 focus:outline-none placeholder-gray-500">
-      @if (registerForm.get('dni')?.touched && registerForm.get('dni')?.invalid) {
-        <p class="text-red-500 text-sm">{{ getErrorMessage('dni') }}</p>
-      }
-    </div>
+      <!-- DNI -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">DNI</label>
+        <input type="text" formControlName="dni" placeholder="Ingresa tu DNI"
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 
+                 focus:ring-purple-500 focus:outline-none placeholder-gray-400 shadow-xl">
+        @if (registerForm.get('dni')?.touched && registerForm.get('dni')?.invalid) {
+          <p class="text-red-500 text-sm">{{ getErrorMessage('dni') }}</p>
+        }
+      </div>
 
-    <!-- Foto Perfil -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Foto de Perfil (URL)</label>
-      <input type="text" formControlName="fotoPerfil" placeholder="Ingresa la URL de tu foto"
-        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 
-               focus:ring-purple-500 focus:outline-none placeholder-gray-500">
-    </div>
+      <!-- Foto Perfil -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Foto de Perfil (URL)</label>
+        <input type="text" formControlName="fotoPerfil" placeholder="URL de tu foto"
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 
+                 focus:ring-purple-500 focus:outline-none placeholder-gray-400 shadow-xl">
+      </div>
 
-    <!-- País -->
-<div>
-  <label class="block text-sm font-medium text-gray-700 mb-1">País</label>
-  <select formControlName="pais" class="w-full px-4 py-2 rounded-lg border">
-    <option value="" disabled selected>Selecciona un país</option>
-    <option *ngFor="let c of countryList" [ngValue]="c">
-      {{ c.name.common }} ({{ c.cca2 }}) – {{ c.idd.root }}{{ c.idd.suffixes[0] }}
-    </option>
-  </select>
-  <p *ngIf="registerForm.get('pais')?.touched && registerForm.get('pais')?.invalid"
-     class="text-red-500 text-sm">Selecciona un país</p>
-</div>
+      <!-- País y Teléfono (ocupan las 2 columnas en móviles y compactados en desktop) -->
+      <div class="md:col-span-2">
+        <app-pais-telefono [parentForm]="registerForm"></app-pais-telefono>
+      </div>
 
-<!-- Número -->
-<div>
-  <label class="block text-sm font-medium text-gray-700 mb-1">Número</label>
-  <input type="text" formControlName="numero" placeholder="Número de teléfono"
-         class="w-full px-4 py-2 rounded-lg border">
-  <p *ngIf="registerForm.get('numero')?.touched && registerForm.get('numero')?.invalid"
-     class="text-red-500 text-sm">El número es requerido</p>
-</div>
-
-
-    <!-- Email -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
-      <input type="email" formControlName="email" placeholder="Ingresa tu correo"
-        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 
-               focus:ring-purple-500 focus:outline-none placeholder-gray-500">
-      @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
-        <p class="text-red-500 text-sm">{{ getErrorMessage('email') }}</p>
-      }
+      <!-- Email -->
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico (Google)</label>
+        <input type="email" formControlName="email" placeholder="Ingresa tu correo"
+          class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 
+                 focus:ring-purple-500 focus:outline-none placeholder-gray-400 shadow-xl">
+        @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+          <p class="text-red-500 text-sm">{{ getErrorMessage('email') }}</p>
+        }
+      </div>
     </div>
 
     <!-- Mensajes -->
-    @if (successMessage) {
-      <div class="text-green-600 text-sm font-medium">{{ successMessage }}</div>
-    }
-    @if (errorMessage) {
-      <div class="text-red-600 text-sm font-medium">{{ errorMessage }}</div>
-    }
-
-    <!-- Separador -->
-    <div class="flex items-center my-4">
-      <div class="flex-grow border-t border-gray-300"></div>
-      <span class="px-3 text-gray-500 text-sm">o</span>
-      <div class="flex-grow border-t border-gray-300"></div>
-    </div>
-    <div class="text-center text-sm">
-      <span class="text-gray-600">¿Ya tienes cuenta?</span>
-      <a routerLink="/auth/login" class="text-purple-600 hover:underline font-medium">
-        Inicia sesión
-      </a>
+    <div class="mt-4">
+      @if (successMessage) {
+        <div class="text-green-600 text-sm font-medium">{{ successMessage }}</div>
+      }
+      @if (errorMessage) {
+        <div class="text-red-600 text-sm font-medium">{{ errorMessage }}</div>
+      }
     </div>
 
     <!-- Boton -->
-    <button type="submit" [disabled]="loading || registerForm.invalid"
-      class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg shadow-md 
-             hover:opacity-90 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed">
-      {{ loading ? 'Registrando...' : 'Registrarse' }}
-    </button>
+    <div class="mt-8">
+      <button 
+        type="submit" 
+        [disabled]="loading || registerForm.invalid"
+        class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl shadow-md 
+               hover:opacity-90 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold"
+      >
+        {{ loading ? 'Registrando...' : 'Registrarse' }}
+      </button>
+    </div>
+
+    <!-- Link Login -->
+    <div class="text-center text-sm mt-4">
+      <span class="text-gray-600">¿Ya tienes cuenta?</span>
+      <a routerLink="/auth/login" class="text-purple-600 hover:underline font-medium ml-1">
+        Inicia sesión
+      </a>
+    </div>
   </form>
 </div>
