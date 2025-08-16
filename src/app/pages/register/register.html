@@ -45,6 +45,29 @@
                focus:ring-purple-500 focus:outline-none placeholder-gray-500">
     </div>
 
+    <!-- País -->
+<div>
+  <label class="block text-sm font-medium text-gray-700 mb-1">País</label>
+  <select formControlName="pais" class="w-full px-4 py-2 rounded-lg border">
+    <option value="" disabled selected>Selecciona un país</option>
+    <option *ngFor="let c of countryList" [ngValue]="c">
+      {{ c.name.common }} ({{ c.cca2 }}) – {{ c.idd.root }}{{ c.idd.suffixes[0] }}
+    </option>
+  </select>
+  <p *ngIf="registerForm.get('pais')?.touched && registerForm.get('pais')?.invalid"
+     class="text-red-500 text-sm">Selecciona un país</p>
+</div>
+
+<!-- Número -->
+<div>
+  <label class="block text-sm font-medium text-gray-700 mb-1">Número</label>
+  <input type="text" formControlName="numero" placeholder="Número de teléfono"
+         class="w-full px-4 py-2 rounded-lg border">
+  <p *ngIf="registerForm.get('numero')?.touched && registerForm.get('numero')?.invalid"
+     class="text-red-500 text-sm">El número es requerido</p>
+</div>
+
+
     <!-- Email -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
