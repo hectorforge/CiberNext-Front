@@ -9,8 +9,16 @@ import { Unauthorized } from './features/public/pages/unauthorized/unauthorized'
 import { Contact } from '@features/public/pages/contact/contact';
 import { Perfil } from './features/auth/pages/perfil/perfil';
 import { AUTH_ROUTES } from '@features/auth/auth.routes';
+import { CreateProductComponent } from '@features/demo-productos/createProduct/createProduct';
 
 export const routes: Routes = [
+
+  // Componentes para test
+  {
+    path:'test',
+    component: CreateProductComponent
+  },
+
   // Rutas para navegar en la pagina del estudiante (ya logeado xd)
   {
     path: 'home',
