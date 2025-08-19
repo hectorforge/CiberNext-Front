@@ -8,38 +8,40 @@ La aplicación implementa separación por **features**, gestión de estado con *
 ---
 
 ## 🏛️ Arquitectura del proyecto
+
+```plaintext
 src/app/
  ├── core/
  │    ├── interceptors/
  │    │     └── error.interceptor.ts # Manejador de errores para toda la aplicacion
  │    ├── auth/
  │    │     ├── auth.service.ts         # Maneja login, logout, refresh token, perfil
- │    │     ├──  auth.guard.ts           # Protege rutas
+ │    │     ├── auth.guard.ts           # Protege rutas
  │    │     └── auth.interceptor.ts     # Inyecta el token en cada request
  │    ├── services/
  │    │     └── Servicios globales
  │    └── guards/ 
  ├── shared/
- │    ├── components/ # Compoentes en común para toda la app (navbar , footer,formulario etc)
+ │    ├── components/ # Componentes en común para toda la app (navbar, footer, formularios, etc.)
  │    ├── pipes/
  │    └── directives/
  ├── features/
  │    ├── productos/
- │    │     ├── models/    # Interfaces que tipan cada tipo de respuesta ( especificas de la feature, asi evitamos el tipo "any")
+ │    │     ├── models/    # Interfaces que tipan cada tipo de respuesta (específicas de la feature, así evitamos el tipo "any")
  │    │     ├── pages/
  │    │     ├── components/
- │    │     ├── services/    # Servicios como vuelvo a decir especificos de cada feature particulares   (Leer Articulo 1)
- │    │     ├── product.routes.ts  # Rutas especificas y relacionada con la feature ( especificas de la feature)
- │    │     └── store/ # Manejo de estados con las signals (Leer Articulo 2)
+ │    │     ├── services/  # Servicios específicos de la feature (ver Artículo 1)
+ │    │     ├── product.routes.ts  # Rutas específicas y relacionadas con la feature
+ │    │     └── store/     # Manejo de estados con signals (ver Artículo 2)
  │    ├── usuarios/
  │    └── ventas/
  ├── models/               # Modelos compartidos en toda la app
  │    ├── usuario.model.ts
  │    ├── rol.model.ts
  │    └── auth-response.model.ts 
- ├── environments/ # Enlaces y cosas acerca de la variables de entornos ( Por ejemplo el link de cada endopint base o de cada controlador)
+ ├── environments/ # Variables de entorno (ej: endpoint base de cada controlador)
  └── app.routes.ts
-
+```
 
 ---
 
