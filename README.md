@@ -1,3 +1,165 @@
+# Proyect
+
+# 📚 CiberNext – Página Educativa
+
+Este proyecto está desarrollado en **Angular 20+** siguiendo buenas prácticas y una arquitectura modular y escalable.  
+La aplicación implementa separación por **features**, gestión de estado con **signals stores**, y servicios desacoplados para mantener un código limpio y fácil de mantener.  
+
+---
+
+## 🏛️ Arquitectura del proyecto
+src/app/
+ ├── core/
+ │    ├── interceptors/
+ │    │     └── error.interceptor.ts # Manejador de errores para toda la aplicacion
+ │    ├── auth/
+ │    │     ├── auth.service.ts         # Maneja login, logout, refresh token, perfil
+ │    │     ├──  auth.guard.ts           # Protege rutas
+ │    │     └── auth.interceptor.ts     # Inyecta el token en cada request
+ │    ├── services/
+ │    │     └── Servicios globales
+ │    └── guards/ 
+ ├── shared/
+ │    ├── components/ # Compoentes en común para toda la app (navbar , footer,formulario etc)
+ │    ├── pipes/
+ │    └── directives/
+ ├── features/
+ │    ├── productos/
+ │    │     ├── models/    # Interfaces que tipan cada tipo de respuesta ( especificas de la feature, asi evitamos el tipo "any")
+ │    │     ├── pages/
+ │    │     ├── components/
+ │    │     ├── services/    # Servicios como vuelvo a decir especificos de cada feature particulares   (Leer Articulo 1)
+ │    │     ├── product.routes.ts  # Rutas especificas y relacionada con la feature ( especificas de la feature)
+ │    │     └── store/ # Manejo de estados con las signals (Leer Articulo 2)
+ │    ├── usuarios/
+ │    └── ventas/
+ ├── models/               # Modelos compartidos en toda la app
+ │    ├── usuario.model.ts
+ │    ├── rol.model.ts
+ │    └── auth-response.model.ts 
+ ├── environments/ # Enlaces y cosas acerca de la variables de entornos ( Por ejemplo el link de cada endopint base o de cada controlador)
+ └── app.routes.ts
+
+
+---
+
+## 📌 Artículo 0 – Diferencia entre `service` y `store`
+
+### 🔹 Service
+👉 Se encarga de la **comunicación con la API** (capa de acceso a datos).  
+- Realiza `HttpClient.get/post/put/delete`.  
+- No guarda estado, solo devuelve `observables/promesas`.  
+- Es un **DAO/Repository** en términos de arquitectura limpia.  
+
+### 🔹 Store
+👉 Se encarga de la **gestión de estado de la UI**.  
+- Recibe datos del `service`.  
+- Guarda los resultados en **signals** o en un **state manager** (`NgRx`, `NGXS`).  
+- Expone datos listos para que los consuman los componentes.  
+
+📌 **Regla de oro:**  
+👉 El **store consume al service, no al revés**.  
+
+---
+
+## 📌 Artículo 1 – Ejemplo de un `service`
+
+👉 Aquí solo hay llamadas **HTTP**, sin estado.  
+
+```ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Producto } from '../models/producto.model';
+import { environment } from '@envs/environment.development';
+
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+  private readonly apiUrl = `${environment.apiUrl}/productos`;
+
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable<Producto[]> {
+    return this.http.get<Producto[]>(this.apiUrl);
+  }
+
+  getById(id: number): Observable<Producto> {
+    return this.http.get<Producto>(`${this.apiUrl}/${id}`);
+  }
+
+  create(product: Producto): Observable<Producto> {
+    return this.http.post<Producto>(this.apiUrl, product);
+  }
+
+  update(id: number, product: Producto): Observable<Producto> {
+    return this.http.put<Producto>(`${this.apiUrl}/${id}`, product);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+}
+```
+---
+
+## 📌 Artículo 2 – Ejemplo de un `store`
+
+👉 Aquí solo hay llamadas **HTTP**, sin estado.  
+Estado reactivo (signal).
+Lógica de actualización local después de llamar al servicio.
+Flags como loading o error para la UI
+
+```ts
+import { Injectable, signal } from '@angular/core';
+import { ProductService } from '../services/product.service';
+import { Producto } from '../models/producto.model';
+
+@Injectable({ providedIn: 'root' })
+export class ProductStore {
+  private readonly _products = signal<Producto[]>([]);
+  readonly products = this._products.asReadonly();
+
+  private readonly _loading = signal<boolean>(false);
+  readonly loading = this._loading.asReadonly();
+
+  constructor(private service: ProductService) {}
+
+  loadProducts() {
+    this._loading.set(true);
+    this.service.getAll().subscribe({
+      next: (data) => this._products.set(data),
+      error: () => this._loading.set(false),
+      complete: () => this._loading.set(false),
+    });
+  }
+
+  addProduct(product: Producto) {
+    this.service.create(product).subscribe(newProduct => {
+      this._products.update(list => [...list, newProduct]);
+    });
+  }
+
+  removeProduct(id: number) {
+    this.service.delete(id).subscribe(() => {
+      this._products.update(list => list.filter(p => p.id !== id));
+    });
+  }
+}
+```
+---
+
+📌 Resumen
+product.service.ts → solo API (HTTP).
+product.store.ts → estado en memoria (signals, NgRx) + coordinación con el servicio.
+
+Los componentes → solo consumen el store, nunca directamente el service o al menos no directamente 
+El store centraliza el estado → tus componentes solo "escuchan".
+Puedes tener varios componentes (ej. lista, detalle, formulario) que comparten el mismo estado sin duplicar código.
+El store abstrae la API → si mañana cambias la forma de obtener datos, no tocas los componentes.
+
+📌 Cadena de responsabilidades:
+Componente → Store → Service → API
+
 # Frontend
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.5.
