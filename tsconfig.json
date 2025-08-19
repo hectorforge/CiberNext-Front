@@ -4,12 +4,12 @@
   "compileOnSave": false,
   "compilerOptions": {
 
-    "baseUrl":"./src/*",
+    "baseUrl":"./src/",
     "paths":{
-      "@/core*":["app/core/*"],
-      "@/shared*":["app/shared/*"],
-      "@/models*":["app/models/*"],
-      "@/features*":["app/features/*"],
+      "@core/*":["app/core/*"],
+      "@shared/*":["app/shared/*"],
+      "@models/*":["app/models/*"],
+      "@features/*":["app/features/*"],
       "@envs/*" : ["environments/*"],
     },
 

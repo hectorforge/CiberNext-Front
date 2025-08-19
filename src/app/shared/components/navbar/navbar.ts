@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {AuthService} from '../../services/auth-service';
+import {AuthService} from '../../../core/services/auth-service';
 import {CookieService} from 'ngx-cookie-service';
 import {CommonModule} from '@angular/common';
 

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ContriesService } from '../../services/contries-service';
+import { ContriesService } from '../../../core/services/contries-service';
 import { CommonModule } from '@angular/common';
 
 @Component({

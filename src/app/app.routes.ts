@@ -1,18 +1,14 @@
 import { Routes } from '@angular/router';
-import {Home} from './pages/home/home';
-import {Login} from './pages/login/login';
-import {Register} from './pages/register/register';
-import {MainLayout} from './layouts/main-layout/main-layout';
-import {AuthLayout} from './layouts/auth-layout/auth-layout.component';
-import {DetailCourse} from './pages/detail-course/detail-course';
-import { userGuardGuard } from './guards/user-guard-guard';
-import { AdminLayout } from './layouts/admin-layout/admin-layout';
-import { Dashboard } from './pages/admin/dashboard/dashboard';
-import { Unauthorized } from './pages/unauthorized/unauthorized';
-import { Contact } from './pages/contact/contact';
-import { Perfil } from './pages/perfil/perfil';
-import { ChangePassword } from './pages/change-password/change-password';
-import { UpdatePerfil } from './pages/update-perfil/update-perfil';
+import { Home } from '@features/cursos/pages/home/home';
+import {MainLayout} from './shared/layouts/main-layout/main-layout';
+import {DetailCourse} from './features/cursos/pages/detail-course/detail-course';
+import { userGuardGuard } from './core/guards/user-guard-guard';
+import { AdminLayout } from './shared/layouts/admin-layout/admin-layout';
+import { Dashboard } from './features/admin/pages/dashboard';
+import { Unauthorized } from './features/public/pages/unauthorized/unauthorized';
+import { Contact } from '@features/public/pages/contact/contact';
+import { Perfil } from './features/auth/pages/perfil/perfil';
+import { AUTH_ROUTES } from '@features/auth/auth.routes';
 
 export const routes: Routes = [
   // Rutas para navegar en la pagina del estudiante (ya logeado xd)
@@ -38,13 +34,7 @@ export const routes: Routes = [
   // Rutas para navegar en la pagina de autenticacion 
   {
     path: 'auth',
-    component: AuthLayout,
-    children: [
-      { path: 'login', component: Login },
-      { path: 'register', component: Register },
-      {path: 'change-password', component: ChangePassword,canActivate: [userGuardGuard]},
-      {path: 'update-perfil', component: UpdatePerfil, canActivate: [userGuardGuard]}
-    ]
+    children:AUTH_ROUTES
   },
 
   // Rutas para navegar en la pagina de administrador

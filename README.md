@@ -22,6 +22,7 @@ src/app/
  │    │     └── Servicios globales
  │    └── guards/ 
  ├── shared/
+ │    ├── layouts/
  │    ├── components/ # Componentes en común para toda la app (navbar, footer, formularios, etc.)
  │    ├── pipes/
  │    └── directives/
@@ -33,13 +34,17 @@ src/app/
  │    │     ├── services/  # Servicios específicos de la feature (ver Artículo 1)
  │    │     ├── product.routes.ts  # Rutas específicas y relacionadas con la feature
  │    │     └── store/     # Manejo de estados con signals (ver Artículo 2)
+ │    └── public/   # Nuestro home page publico ( Contact, Homepage, Acerca de nosotros, etc)
  │    ├── usuarios/
+ │    ├── auth/
  │    └── ventas/
  ├── models/               # Modelos compartidos en toda la app
  │    ├── usuario.model.ts
  │    ├── rol.model.ts
  │    └── auth-response.model.ts 
- ├── environments/ # Variables de entorno (ej: endpoint base de cada controlador)
+ ├── environments/ # Variables de entorno (ej: endpoint base de cada controlador, es importante que en ambos archivos coloquen las mismas rutas por ahora)
+ │    ├── environment.development.ts
+ │    └── environment.ts 
  └── app.routes.ts
 ```
 

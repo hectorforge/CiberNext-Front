@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../../../../core/services/auth-service';
 import countriesData from 'world-countries';
 import type { Country } from 'world-countries';
-import { PaisTelefono } from "../../components/pais-telefono/pais-telefono";
+import { PaisTelefono } from "../../../../shared/components/pais-telefono/pais-telefono";
 
 @Component({
   selector: 'app-register',
