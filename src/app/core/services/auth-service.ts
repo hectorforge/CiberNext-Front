@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '@envs/environment.development';
 import { jwtDecode } from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, tap } from 'rxjs';
@@ -14,8 +15,8 @@ interface JwtPayload {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth';
-  private apiUrlUser = 'http://localhost:8080/api/users';
+  private apiUrl = environment.apiURLAuth;
+  private apiUrlUser = environment.apiURLUsers;
   private tokenKey = 'authToken';
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
