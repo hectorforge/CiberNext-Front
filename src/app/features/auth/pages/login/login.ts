@@ -38,7 +38,23 @@ export class Login {
       next: (res) => {
         console.log('Login exitoso:', res);
         this.loading = false;
-        this.router.navigate(['/home']);
+        //this.router.navigate(['/home']);
+        const roles =this.authService.getRolesFromToken();
+        console.log("ROLES DE USUARIO:", roles);
+        if(roles.length === 1) {
+          if(roles.includes('ALUMNO')) {
+            this.router.navigate(['/home']);
+          }
+          else if(roles.includes('PROFESOR')) {
+            this.router.navigate(['/teacher']);
+          }
+          else if (roles.includes('ADMIN')) {
+          console.log('Usuario con rol ADMIN');
+          this.router.navigate(['/admin/dashboard']);
+          }
+        }  else{
+          console.error('Rol de usuario no reconocido');
+        }
 
       },
       error: (err) => {

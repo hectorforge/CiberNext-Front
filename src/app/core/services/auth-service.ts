@@ -1,8 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { jwtDecode } from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, tap } from 'rxjs';
 
+interface JwtPayload {
+  roles: { id: number; nombre: string }[];
+  sub: string;
+  exp: number;
+  iat: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -44,5 +51,20 @@ export class AuthService {
 
   logout(): void {
     this.cookieService.delete(this.tokenKey, '/');
+  }
+
+  getRolesFromToken(): string[] {
+    const token = this.cookieService.get(this.tokenKey);
+    if (!token) return [];
+  
+    try {
+      const payload = jwtDecode<JwtPayload>(token);
+      return Array.isArray(payload.roles)
+        ? payload.roles.map(r => r.nombre)
+        : [];
+    } catch (error) {
+      console.error("Error al decodificar token:", error);
+      return [];
+    }
   }
 }

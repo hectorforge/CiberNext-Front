@@ -4,12 +4,13 @@ import {MainLayout} from './shared/layouts/main-layout/main-layout';
 import {DetailCourse} from './features/cursos/pages/detail-course/detail-course';
 import { userGuardGuard } from './core/guards/user-guard-guard';
 import { AdminLayout } from './shared/layouts/admin-layout/admin-layout';
-import { Dashboard } from './features/admin/pages/dashboard';
+import {DashboardAdmin } from '@features/admin/pages/dashboard';
 import { Unauthorized } from './features/public/pages/unauthorized/unauthorized';
 import { Contact } from '@features/public/pages/contact/contact';
-import { Perfil } from './features/auth/pages/perfil/perfil';
+import { Perfil } from '@features/auth/pages/perfil/perfil';
 import { AUTH_ROUTES } from '@features/auth/auth.routes';
 import { CreateProductComponent } from '@features/demo-productos/createProduct/createProduct';
+import { DashboardTeacher } from '@features/profesor/pages/dashboard/dashboard';
 
 export const routes: Routes = [
 
@@ -24,9 +25,9 @@ export const routes: Routes = [
     path: 'home',
     component: MainLayout,
     children: [
-      { path: '', component: Home, canActivate: [userGuardGuard] },
-      {path: 'me', component: Perfil, canActivate: [userGuardGuard] },
-      { path: 'detail/course', component: DetailCourse,canActivate: [userGuardGuard] },
+      { path: '', component: Home, canActivate: [userGuardGuard],data: {roles : ['ALUMNO']}},
+      {path: 'me', component: Perfil, canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
+      { path: 'detail/course', component: DetailCourse,canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
     ]
   },
 
@@ -50,9 +51,18 @@ export const routes: Routes = [
     path:'admin',
     component: AdminLayout,
     children:[
-      {path: 'dashboard', component:Dashboard,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} }
+      {path: 'dashboard', component:DashboardAdmin,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} }
     ]
   },
+
+    // Rutas para navegar en la pagina de profesor
+    {
+      path:'teacher',
+      component: AdminLayout,
+      children:[
+        {path: 'dashboard', component:DashboardTeacher,canActivate: [userGuardGuard], data: {roles : ['PROFESOR']} }
+      ]
+    },
 
   //Rutas genericas
   {path: 'unauthorized', component: Unauthorized},

@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard.html',
   styles: ``
 })
-export class DashboardAdmin {
+export class DashboardTeacher {
 
 }
