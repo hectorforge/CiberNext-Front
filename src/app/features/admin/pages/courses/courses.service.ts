@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@envs/environment.development';
 
+
 export interface CursoDto { id?: number; codigo?: string; nombre?: string; descripcion?: string; }
 export interface ProfesorDto {
   idProfesor?: number;
@@ -25,6 +26,22 @@ export interface AlumnoDto {
   fotoPerfil?: string;
   dni?: string;
   [key: string]: any;
+}
+
+export interface DocumentoDto {
+  id?: number;
+  nombre?: string;
+  archivo?: string;
+  descripcion?: string;
+  idTipoDocumento?: number;
+  nombreTipoDucumento?: string;
+  extensionTipoDocumento?: string;
+  idUnidadAprendizaje?: number;
+  nombreUnidadaprendizaje?: string;
+  codigoUnidadaprendizaje?: string;
+  descripcionUnidadaprendizaje?: string;
+  estadoUnidadaprendizaje?: string;
+  cursoId?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -61,6 +78,24 @@ export class CoursesService {
     return this.http.get<AlumnoDto[]>(`${this.api}/${idCurso}/alumnos`);
   }
 
+  listarDocumentosPorCurso(idCurso: number): Observable<DocumentoDto[]> {
+    return this.http.get<DocumentoDto[]>(`${this.api}/${idCurso}/documentos`);
+  }
+
+  // Registrar documento (POST /api/cursos/registrar-documento)
+  registrarDocumento(doc: DocumentoDto): Observable<DocumentoDto> {
+    return this.http.post<DocumentoDto>(`${this.api}/registrar-documento`, doc);
+  }
+
+  // Eliminar documento (DELETE /api/cursos/{id}/eliminar-documento)
+  eliminarDocumento(idDocumento: number): Observable<any> {
+    return this.http.delete(`${this.api}/${idDocumento}/eliminar-documento`);
+  }
+  
+  actualizarDocumento(idCurso: number, doc: DocumentoDto): Observable<DocumentoDto> {
+    return this.http.put<DocumentoDto>(`${this.api}/${idCurso}/actualizar-documento`, doc);
+  }
+
   buscarCursos(filtro: string) {
     const url = `${this.api}/buscar?filtro=${encodeURIComponent(filtro)}`;
     console.log('DEBUG: buscarCursos ->', url);
@@ -72,4 +107,6 @@ export class CoursesService {
       }
     });
   }
+
+
 }

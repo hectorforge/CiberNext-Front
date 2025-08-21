@@ -19,56 +19,36 @@
         <table class="min-w-full text-base table-auto">
           <thead class="bg-slate-50 border-b">
             <tr>
-              <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Código</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Nombre</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Apellido</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Email</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">País</th>
-              <th class="px-4 py-3 text-center text-sm font-semibold">Acciones</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase w-12">ID</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase w-32">Código</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Nombre</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Apellido</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Email</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">País</th>
+              <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 uppercase w-56">Acciones</th>
             </tr>
           </thead>
+
           <tbody class="divide-y">
             <tr *ngFor="let a of pagedAlumnos()" class="hover:bg-slate-50">
-              <td class="px-4 py-4">{{ a.id }}</td>
-              <td class="px-4 py-4">{{ a.codigoAlumno }}</td>
-              <td class="px-4 py-4">{{ a.nombre }}</td>
-              <td class="px-4 py-4">{{ a.apellido }}</td>
-              <td class="px-4 py-4">{{ a.email }}</td>
-              <td class="px-4 py-4">{{ a.pais }}</td>
-
-              <td class="px-4 py-4 text-center">
+              <td class="px-4 py-4 text-slate-700 font-medium text-sm align-top">{{ a.id }}</td>
+              <td class="px-4 py-4 text-slate-800 font-semibold text-sm align-top">{{ a.codigoAlumno }}</td>
+              <td class="px-4 py-4 text-slate-700 text-sm align-top">{{ a.nombre }}</td>
+              <td class="px-4 py-4 text-slate-700 text-sm align-top">{{ a.apellido }}</td>
+              <td class="px-4 py-4 text-slate-600 text-sm align-top">{{ a.email }}</td>
+              <td class="px-4 py-4 text-slate-600 text-sm align-top">{{ a.pais }}</td>
+              <td class="px-4 py-4 text-sm align-top">
                 <div class="flex gap-2 justify-center">
-                  <button class="px-3 py-1 bg-amber-400 hover:bg-amber-500 rounded-md text-sm"
-                          type="button"
-                          (click)="openEdit(a)">
-                    Editar
-                  </button>
-
-                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
-                          type="button"
-                          (click)="confirmDelete(a)">
-                    Eliminar
-                  </button>
-
-                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm"
-                          type="button"
-                          (click)="openCursos(a)">
-                    Cursos
-                  </button>
-
-                  <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md text-sm text-slate-800"
-                          type="button"
-                          (click)="openDetail(a)">
-                    Detalle
-                  </button>
+                  <button class="px-3 py-1 bg-amber-400 hover:bg-amber-500 rounded-md text-sm" (click)="openEdit(a)">Editar</button>
+                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm" (click)="confirmDelete(a)">Eliminar</button>
+                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm" (click)="openCursos(a)">Cursos</button>
+                  <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md text-sm text-slate-800" (click)="openDetail(a)">Detalle</button>
                 </div>
               </td>
             </tr>
+
             <tr *ngIf="pagedAlumnos().length === 0">
-              <td colspan="7" class="px-4 py-12 text-center text-sm text-slate-500">
-                No hay alumnos para mostrar.
-              </td>
+              <td colspan="7" class="px-4 py-12 text-center text-sm text-slate-500">No hay alumnos para mostrar.</td>
             </tr>
           </tbody>
         </table>
@@ -166,29 +146,14 @@
           <button (click)="cancel()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
         </div>
 
-        <!-- estilos visuales locales: intenta distribuir campos en 2 columnas -->
-        <style>
-          ::ng-deep app-dynamic-form form {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.75rem;
-            align-items: start;
-          }
-          ::ng-deep app-dynamic-form .field-full { grid-column: 1 / -1; }
-          ::ng-deep app-dynamic-form .form-actions {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: flex-end;
-            gap: .5rem;
-          }
-        </style>
-
         <div class="p-6">
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Formulario (ocupa 2/3) -->
             <div class="md:col-span-2">
               <div class="bg-slate-50 border border-slate-100 rounded-lg p-4">
+                <!-- Inline styles removed: usar clase .grid-form en el componente dinámico -->
                 <app-dynamic-form
+                  class="grid-form"
                   #dynFormRef
                   [fields]="fields"
                   [initialData]="selectedAlumnoValue"

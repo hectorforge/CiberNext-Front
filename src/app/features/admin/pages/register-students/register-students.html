@@ -19,40 +19,32 @@
         <table class="min-w-full text-base table-auto">
           <thead class="bg-slate-50 border-b">
             <tr>
-              <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Alumno</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Curso</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Profesor</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Fecha</th>
-              <th class="px-4 py-3 text-center text-sm font-semibold">Acciones</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase w-12">ID</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Alumno</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Curso</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Profesor</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Fecha</th>
+              <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 uppercase w-56">Acciones</th>
             </tr>
           </thead>
+
           <tbody class="divide-y">
             <tr *ngFor="let r of pagedRegistros()" class="hover:bg-slate-50">
-              <td class="px-4 py-4">{{ r.id }}</td>
-              <td class="px-4 py-4">{{ r.nombreAlumno }}</td>
-              <td class="px-4 py-4">{{ r.nombreCurso }}</td>
-              <td class="px-4 py-4">{{ r.nombreProfesor }}</td>
-              <td class="px-4 py-4">{{ r.fechaInscripcion | date:'short' }}</td>
-              <td class="px-4 py-4 text-center">
+              <td class="px-4 py-4 text-slate-700 font-medium text-sm align-top">{{ r.id }}</td>
+              <td class="px-4 py-4 text-slate-700 text-sm align-top">{{ r.nombreAlumno }}</td>
+              <td class="px-4 py-4 text-slate-700 text-sm align-top">{{ r.nombreCurso }}</td>
+              <td class="px-4 py-4 text-slate-700 text-sm align-top">{{ r.nombreProfesor }}</td>
+              <td class="px-4 py-4 text-slate-600 text-sm align-top">{{ r.fechaInscripcion | date:'short' }}</td>
+              <td class="px-4 py-4 text-sm align-top">
                 <div class="flex gap-2 justify-center">
-                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm"
-                          type="button"
-                          (click)="openDetail(r)">
-                    Detalle
-                  </button>
-                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
-                          type="button"
-                          (click)="confirmDelete(r)">
-                    Eliminar
-                  </button>
+                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm" (click)="openDetail(r)">Detalle</button>
+                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm" (click)="confirmDelete(r)">Eliminar</button>
                 </div>
               </td>
             </tr>
+
             <tr *ngIf="pagedRegistros().length === 0">
-              <td colspan="6" class="px-4 py-12 text-center text-sm text-slate-500">
-                No hay registros para mostrar.
-              </td>
+              <td colspan="6" class="px-4 py-12 text-center text-sm text-slate-500">No hay registros para mostrar.</td>
             </tr>
           </tbody>
         </table>

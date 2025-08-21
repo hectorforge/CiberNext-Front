@@ -15,7 +15,7 @@ import { Courses } from '@features/admin/pages/courses/courses';
 import { Students } from '@features/admin/pages/students/students';
 import { RegisterStudents } from '@features/admin/pages/register-students/register-students';
 import { Teachers } from '@features/admin/pages/teachers/teachers';
-import { Documents } from '@features/admin/pages/documents/documents';
+import { AreaSpecialization } from '@features/admin/pages/area-specialization/area-specialization';
 
 export const routes: Routes = [
 
@@ -60,7 +60,7 @@ export const routes: Routes = [
         {path: 'students', component:Students,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
         {path: 'courses', component:Courses,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
         {path: 'teachers', component:Teachers,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
-         {path: 'documents', component:Documents,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
+         {path: 'areaSpecialization', component:AreaSpecialization,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
         {path: 'registerStudents', component:RegisterStudents,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} }
   
     ],

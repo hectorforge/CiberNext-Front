@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* layout específico para app-dynamic-form cuando se aplica la clase "grid-form" */
+.grid-form form {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-3 items-start;
+}
+
+.grid-form .field-full {
+  @apply col-span-2;
+}
+
+.grid-form .form-actions {
+  @apply col-span-2 flex justify-end gap-2;
+}

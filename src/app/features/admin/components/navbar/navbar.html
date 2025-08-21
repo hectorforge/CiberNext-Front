@@ -65,9 +65,9 @@
       <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/></svg>
       <span *ngIf="!sidebarCollapsed()" class="ml-3">Profesores</span>
     </a>
-     <a [routerLink]="['/admin/documents']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+     <a [routerLink]="['/admin/areaSpecialization']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
       <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/></svg>
-      <span *ngIf="!sidebarCollapsed()" class="ml-3">Documentos</span>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Area de Especialización </span>
     </a>
     <a [routerLink]="['/admin/registerStudents']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
       <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v2M12 20v2"/></svg>
@@ -99,7 +99,7 @@
       <a [routerLink]="['/admin/menu']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Menu</a>
       <a [routerLink]="['/admin/courses']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Cursos</a>
       <a [routerLink]="['/admin/reports']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Reportes</a>
-       <a [routerLink]="['/admin/documents']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Documentos</a>
+       <a [routerLink]="['/admin/areaSpecialization']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Area especializacion</a>
       <div class="mt-4 px-3">
         <a   (click)="logout()"  class="block w-full text-center px-3 py-2 rounded bg-red-600 hover:bg-red-700">Cerrar sesión</a>
       </div>

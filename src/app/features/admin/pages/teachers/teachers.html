@@ -19,24 +19,25 @@
         <table class="min-w-full text-base table-auto">
           <thead class="bg-slate-50 border-b">
             <tr>
-              <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
-                <th class="px-4 py-3 text-left text-sm font-semibold">Código</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Nombre</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Apellido</th>
-              <th class="px-4 py-3 text-left text-sm font-semibold">Email</th>
-              <th class="px-4 py-3 text-center text-sm font-semibold">Acciones</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase w-12">ID</th>
+                <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase w-32">Código</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Nombre</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Apellido</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase">Email</th>
+              <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 uppercase w-56">Acciones</th>
             </tr>
           </thead>
+
           <tbody class="divide-y">
             <tr *ngFor="let p of pagedProfesores()" class="hover:bg-slate-50">
-              <td class="px-4 py-4">{{ p.id }}</td>
-                <td class="px-4 py-4">{{ p.codigoProfesor }}</td>
-              <td class="px-4 py-4">{{ p.nombre }}</td>
-              <td class="px-4 py-4">{{ p.apellido }}</td>
-              <td class="px-4 py-4">{{ p.email }}</td>
-             
-              <td class="px-4 py-4 text-center">
+              <td class="px-4 py-4 text-slate-700 font-medium text-sm align-top">{{ p.id }}</td>
+              <td class="px-4 py-4 text-slate-800 font-semibold text-sm align-top">{{ p.codigoProfesor }}</td>
+              <td class="px-4 py-4 text-slate-700 text-sm align-top">{{ p.nombre }}</td>
+              <td class="px-4 py-4 text-slate-700 text-sm align-top">{{ p.apellido }}</td>
+              <td class="px-4 py-4 text-slate-600 text-sm align-top">{{ p.email }}</td>
+              <td class="px-4 py-4 text-sm align-top">
                 <div class="flex gap-2 justify-center">
+                  <!-- botones mantienen su funcionalidad -->
                   <button class="px-3 py-1 bg-amber-400 hover:bg-amber-500 rounded-md text-sm"
                           type="button"
                           (click)="openEdit(p); $event.stopPropagation(); $event.preventDefault()">
@@ -64,6 +65,7 @@
                 </div>
               </td>
             </tr>
+
             <tr *ngIf="pagedProfesores().length === 0">
               <td colspan="6" class="px-4 py-12 text-center text-sm text-slate-500">
                 No hay profesores para mostrar.
@@ -168,47 +170,25 @@
           <button (click)="cancel()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
         </div>
 
-        <!-- estilos visuales locales: intenta distribuir campos en 2 columnas -->
-        <style>
-          /* Forzar grid 2 columnas dentro del formulario del componente dinámico */
-          ::ng-deep app-dynamic-form form {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 0.75rem;
-            align-items: start;
-          }
-          /* Si algún campo debe ocupar todo el ancho (ej. biografía), dynamic form debe exponer una clase;
-             este selector cubre inputs/textarea sin clase específica forzándolos a ocupar una columna;
-             para forzar campo full-width desde aquí (si hace falta), aplicar .field-full al wrapper interno. */
-          ::ng-deep app-dynamic-form .field-full {
-            grid-column: 1 / -1;
-          }
-          /* Ajustes visuales para que los botones/submit del formulario queden alineados a la derecha */
-          ::ng-deep app-dynamic-form .form-actions {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: flex-end;
-            gap: .5rem;
-          }
-        </style>
-
-        <div class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Formulario (ocupa 2/3) -->
+        <!-- estilos visuales locales: eliminado, ahora usamos la clase .grid-form en CSS global -->
+         <div class="p-6">
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+             <!-- Formulario (ocupa 2/3) -->
             <div class="md:col-span-3">
-              <div class="bg-slate-50 border border-slate-100 rounded-lg p-4">
-                <!-- mantenemos el componente dinámico tal cual (no añadimos lógica) -->
+               <div class="bg-slate-50 border border-slate-100 rounded-lg p-4">
+                 <!-- mantenemos el componente dinámico tal cual (no añadimos lógica) -->
                 <app-dynamic-form
+                  class="grid-form"
                   #dynFormRef
                   [fields]="fields"
                   [initialData]="selectedProfesorValue"
                   submitLabel="Guardar"
                   (formSubmit)="save($event)">
                 </app-dynamic-form>
-              </div>
-            </div>
-          </div>
-        </div>
+               </div>
+             </div>
+           </div>
+         </div>
       </div>
     </div>
 
