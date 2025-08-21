@@ -11,6 +11,11 @@ import { Perfil } from '@features/auth/pages/perfil/perfil';
 import { AUTH_ROUTES } from '@features/auth/auth.routes';
 import { CreateProductComponent } from '@features/demo-productos/createProduct/createProduct';
 import { DashboardTeacher } from '@features/profesor/pages/dashboard/dashboard';
+import { Courses } from '@features/admin/pages/courses/courses';
+import { Students } from '@features/admin/pages/students/students';
+import { RegisterStudents } from '@features/admin/pages/register-students/register-students';
+import { Teachers } from '@features/admin/pages/teachers/teachers';
+import { Documents } from '@features/admin/pages/documents/documents';
 
 export const routes: Routes = [
 
@@ -47,12 +52,19 @@ export const routes: Routes = [
   },
 
   // Rutas para navegar en la pagina de administrador
-  {
+ {
     path:'admin',
     component: AdminLayout,
     children:[
-      {path: 'dashboard', component:DashboardAdmin,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} }
-    ]
+        {path: 'dashboard', component:DashboardAdmin,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
+        {path: 'students', component:Students,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
+        {path: 'courses', component:Courses,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
+        {path: 'teachers', component:Teachers,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
+         {path: 'documents', component:Documents,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
+        {path: 'registerStudents', component:RegisterStudents,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} }
+  
+    ],
+    data: { roles: ['ADMIN'] }
   },
 
     // Rutas para navegar en la pagina de profesor

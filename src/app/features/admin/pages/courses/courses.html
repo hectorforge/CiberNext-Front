@@ -1,0 +1,316 @@
+<div class="w-full px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+      <div class="flex items-start md:items-center gap-4">
+        <div class="flex-shrink-0">
+          <h1 class="text-4xl md:text-5xl font-semibold text-slate-900">Cursos</h1>
+          <p class="mt-1 text-base md:text-lg text-slate-500">Gestión y detalle de cursos</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center bg-white border border-slate-200 rounded-md px-3 py-2 shadow-sm">
+          <svg class="h-5 w-5 text-slate-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+
+          <input #q type="search"
+                 placeholder="Buscar por código o nombre"
+                 class="outline-none text-base text-slate-700 w-80"
+                 (input)="onSearch(q.value)"
+                 [value]="searchTerm()" />
+
+          <button *ngIf="searchTerm()" (click)="onSearch('')" class="ml-3 px-3 py-1 text-sm text-slate-500 hover:text-slate-700 rounded">
+            Limpiar
+          </button>
+        </div>
+
+        <button (click)="openNew()"
+                class="inline-flex items-center gap-3 px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm md:text-base font-medium">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          Nuevo Curso
+        </button>
+      </div>
+    </div>
+
+    <!-- Card + Table (ajustada: títulos centrados, contenido a la izquierda) -->
+    <div class="bg-white rounded-lg shadow ring-1 ring-slate-100 overflow-hidden">
+      <div class="w-full overflow-x-auto">
+        <table class="min-w-full text-base table-auto">
+          <thead class="bg-slate-50 border-b">
+            <tr>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase w-12">ID</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold text-slate-600 uppercase w-32">Código</th>
+
+              <!-- Títulos centrados -->
+              <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 uppercase w-48">Nombre</th>
+              <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 uppercase">Descripción</th>
+
+              <th class="px-4 py-3 text-center text-sm font-semibold text-slate-600 uppercase w-56">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y">
+            <tr *ngFor="let c of pagedCourses()" class="hover:bg-slate-50">
+              <td class="px-4 py-4 text-slate-700 font-medium text-sm align-top">{{ c.id }}</td>
+
+              <td class="px-4 py-4 text-slate-800 font-semibold text-sm align-top">
+                <div class="text-sm md:text-sm">{{ c.codigo }}</div>
+              </td>
+
+              <!-- Contenido alineado a la izquierda -->
+              <td class="px-4 py-4 text-slate-700 text-sm align-top text-left">
+                <div class="font-medium text-sm md:text-base line-clamp-2 inline-block">{{ c.nombre }}</div>
+              </td>
+
+              <td class="px-4 py-4 text-slate-600 text-sm align-top max-w-xl text-left">
+                <div class="text-sm md:text-base text-slate-600 line-clamp-3 break-words inline-block">
+                  {{ c.descripcion }}
+                </div>
+              </td>
+
+              <!-- Acciones (sin cambios funcionales) -->
+              <td class="px-4 py-4 text-sm align-top">
+                <div class="flex flex-col md:flex-row md:justify-end items-center md:items-stretch gap-2">
+                  <div class="flex gap-2">
+                    <button title="Editar"
+                            class="px-3 py-1 bg-amber-400 hover:bg-amber-500 text-slate-900 rounded-md text-xs md:text-sm"
+                            (click)="openEdit(c)">
+                      Editar
+                    </button>
+
+                    <button title="Eliminar"
+                            class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-xs md:text-sm"
+                            (click)="confirmDelete(c)">
+                      Eliminar
+                    </button>
+                  </div>
+
+                  <div class="flex gap-2 mt-2 md:mt-0">
+                    <button title="Ver docentes"
+                            class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-xs md:text-sm"
+                            (click)="openDocentes(c)">
+                      Docentes
+                    </button>
+
+                    <button title="Ver alumnos"
+                            class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-xs md:text-sm"
+                            (click)="openAlumnos(c)">
+                      Alumnos
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="pagedCourses().length === 0">
+              <td colspan="5" class="px-4 py-12 text-center text-sm text-slate-500">
+                No hay cursos para mostrar.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer: Paginación (sin cambios funcionales, paddings reducidos) -->
+      <div class="px-4 py-3 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="text-sm text-slate-600">
+          Mostrando
+          <span class="font-medium text-slate-800">{{ ((pageSize() * (page() - 1)) + 1) }}</span>
+          -
+          <span class="font-medium text-slate-800">{{ Math.min(pageSize() * page(), totalItems()) }}</span>
+          de <span class="font-medium text-slate-800">{{ totalItems() }}</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button (click)="prev()" [disabled]="page() === 1"
+                  class="px-3 py-1 rounded border bg-white text-slate-700 hover:bg-slate-100 disabled:opacity-50 text-sm">
+            Anterior
+          </button>
+
+          <nav class="flex items-center space-x-2">
+            <ng-container *ngFor="let i of [].constructor(totalPages()); let idx = index">
+              <button (click)="goTo(idx + 1)"
+                      [ngClass]="page() === idx + 1 ? 'bg-primary-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'"
+                      class="px-3 py-1 rounded border text-sm">
+                {{ idx + 1 }}
+              </button>
+            </ng-container>
+          </nav>
+
+          <button (click)="next()" [disabled]="page() === totalPages()"
+                  class="px-3 py-1 rounded border bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 text-sm">
+            Siguiente
+          </button>
+
+          <select #ps (change)="setPageSize(+ps.value)" class="ml-3 px-2 py-1 border rounded bg-white text-sm">
+            <option [selected]="pageSize() === 6" value="6">6 / página</option>
+            <option [selected]="pageSize() === 12" value="12">12 / página</option>
+            <option [selected]="pageSize() === 24" value="24">24 / página</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- DynamicForm modal (sin cambios funcionales) -->
+    <div *ngIf="coursesService.selected()" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 md:p-8">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+          <h2 class="text-lg md:text-xl font-semibold">{{ coursesService.selected()?.id ? 'Editar' : 'Nuevo' }} Curso</h2>
+          <button class="text-slate-500 hover:text-slate-700" (click)="cancel()">Cerrar ✕</button>
+        </div>
+
+        <div class="p-6">
+          <app-dynamic-form
+            [fields]="fields"
+            [initialData]="coursesService.selected()"
+            submitLabel="Guardar"
+            (formSubmit)="save($event)">
+          </app-dynamic-form>
+        </div>
+
+        <div class="px-6 py-4 border-t text-right">
+          <button class="px-4 py-2 bg-white border rounded hover:bg-slate-50 text-sm md:text-base" (click)="cancel()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Docentes -->
+    <div *ngIf="showProfesores()" class="fixed inset-0 z-60 flex items-center justify-center bg-black/50 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold">Docentes del curso</h3>
+            <p class="text-sm text-gray-600">{{ cursoEnVista?.nombre }} · {{ cursoEnVista?.codigo }}</p>
+          </div>
+          <button (click)="closeDocentes()" class="text-gray-500 hover:text-gray-700">Cerrar ✕</button>
+        </div>
+
+        <div class="p-6">
+          <div *ngIf="(profesores() || []).length === 0" class="text-center text-sm text-gray-500">
+            No se encontraron docentes.
+          </div>
+
+          <ul class="space-y-3">
+            <li *ngFor="let prof of profesores()" class="flex items-center gap-4 p-3 rounded-md hover:bg-gray-50">
+              <div class="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-full overflow-hidden">
+                <img *ngIf="prof.fotoPerfil" [src]="prof.fotoPerfil" alt="foto" class="h-full w-full object-cover" />
+                <span *ngIf="!prof.fotoPerfil" class="text-sm text-gray-600">{{ (prof.nombre || '').charAt(0) }}{{ (prof.apellido || '').charAt(0) }}</span>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <div class="font-medium text-gray-800">{{ prof.nombre }} {{ prof.apellido }}</div>
+                    <div class="text-sm text-gray-600">{{ prof.correo }}</div>
+                  </div>
+                  <div class="text-sm text-gray-500 text-right">{{ prof.codigoProfesor || '' }}</div>
+                </div>
+
+                <div *ngIf="prof.dni" class="text-xs text-gray-500 mt-1">DNI: {{ prof.dni }}</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="px-6 py-4 border-t text-right">
+          <button (click)="closeDocentes()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Alumnos -->
+    <div *ngIf="showAlumnos()" class="fixed inset-0 z-60 flex items-center justify-center bg-black/50 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold">Alumnos del curso</h3>
+            <p class="text-sm text-gray-600">{{ cursoEnVistaAlumnos?.nombre }} · {{ cursoEnVistaAlumnos?.codigo }}</p>
+          </div>
+          <button (click)="closeAlumnos()" class="text-gray-500 hover:text-gray-700">Cerrar ✕</button>
+        </div>
+
+        <div class="p-6">
+          <div *ngIf="(alumnos() || []).length === 0" class="text-center text-sm text-gray-500">
+            No se encontraron alumnos.
+          </div>
+
+          <ul class="space-y-3">
+            <li *ngFor="let a of alumnos()" class="flex items-center gap-4 p-3 rounded-md hover:bg-gray-50">
+              <div class="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-full overflow-hidden">
+                <img *ngIf="a.fotoPerfil" [src]="a.fotoPerfil" alt="foto" class="h-full w-full object-cover" />
+                <span *ngIf="!a.fotoPerfil" class="text-sm text-gray-600">{{ (a.nombre || '').charAt(0) }}{{ (a.apellido || '').charAt(0) }}</span>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <div class="font-medium text-gray-800">{{ a.nombre }} {{ a.apellido }}</div>
+                    <div class="text-sm text-gray-600">{{ a.email }}</div>
+                  </div>
+                  <div class="text-sm text-gray-500 text-right">{{ a.codigoAlumno || '' }}</div>
+                </div>
+
+                <div class="text-xs text-gray-500 mt-1">
+                  <span *ngIf="a.pais">País: {{ a.pais }} · </span>
+                  <span *ngIf="a.dni">DNI: {{ a.dni }}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="px-6 py-4 border-t text-right">
+          <button (click)="closeAlumnos()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIRMACIÓN DE ELIMINAR (modal profesional) -->
+    <div *ngIf="showDeleteConfirm()" class="fixed inset-0 z-70 flex items-center justify-center bg-black/60 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+        <div class="px-6 py-5 flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+              <!-- ícono de advertencia -->
+              <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4m0 4h.01"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-semibold text-gray-900">Confirmar eliminación</h3>
+            <p class="mt-1 text-sm text-gray-600">
+              ¿Estás seguro que deseas eliminar el curso
+              <span class="font-medium text-gray-800">"{{ cursoParaEliminar()?.nombre }}"</span> ({{ cursoParaEliminar()?.codigo }})?
+              Esta acción no se puede deshacer.
+            </p>
+
+            <div class="mt-4 flex items-center justify-end gap-3">
+              <button (click)="cancelDelete()"
+                      class="px-4 py-2 bg-white border rounded hover:bg-slate-50 text-sm">
+                Cancelar
+              </button>
+
+              <button (click)="confirmDeleteYes()"
+                      [disabled]="deleting()"
+                      class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm flex items-center gap-2">
+                <svg *ngIf="!deleting()" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3"/>
+                </svg>
+                <span *ngIf="!deleting()">Eliminar</span>
+                <span *ngIf="deleting()">Eliminando...</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

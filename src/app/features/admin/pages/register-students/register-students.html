@@ -1,0 +1,202 @@
+<div class="w-full px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-4xl font-semibold text-slate-900">Registro de Alumnos</h1>
+        <p class="mt-1 text-base text-slate-500">Gestión de inscripciones de alumnos a cursos</p>
+      </div>
+      <button (click)="openNew()"
+              class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
+        Nuevo Registro
+      </button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="bg-white rounded-lg shadow ring-1 ring-slate-100 overflow-hidden">
+      <div class="w-full overflow-x-auto">
+        <table class="min-w-full text-base table-auto">
+          <thead class="bg-slate-50 border-b">
+            <tr>
+              <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Alumno</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Curso</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Profesor</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Fecha</th>
+              <th class="px-4 py-3 text-center text-sm font-semibold">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr *ngFor="let r of pagedRegistros()" class="hover:bg-slate-50">
+              <td class="px-4 py-4">{{ r.id }}</td>
+              <td class="px-4 py-4">{{ r.nombreAlumno }}</td>
+              <td class="px-4 py-4">{{ r.nombreCurso }}</td>
+              <td class="px-4 py-4">{{ r.nombreProfesor }}</td>
+              <td class="px-4 py-4">{{ r.fechaInscripcion | date:'short' }}</td>
+              <td class="px-4 py-4 text-center">
+                <div class="flex gap-2 justify-center">
+                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm"
+                          type="button"
+                          (click)="openDetail(r)">
+                    Detalle
+                  </button>
+                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
+                          type="button"
+                          (click)="confirmDelete(r)">
+                    Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="pagedRegistros().length === 0">
+              <td colspan="6" class="px-4 py-12 text-center text-sm text-slate-500">
+                No hay registros para mostrar.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer: Paginación -->
+      <div class="px-4 py-3 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="text-sm text-slate-600">
+          Mostrando
+          <span class="font-medium text-slate-800">{{ ((pageSize() * (page() - 1)) + 1) }}</span>
+          -
+          <span class="font-medium text-slate-800">{{ Math.min(pageSize() * page(), totalItems()) }}</span>
+          de <span class="font-medium text-slate-800">{{ totalItems() }}</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button (click)="prev()" [disabled]="page() === 1"
+                  class="px-3 py-1 rounded border bg-white text-slate-700 hover:bg-slate-100 disabled:opacity-50 text-sm">
+            Anterior
+          </button>
+
+          <nav class="flex items-center space-x-2">
+            <ng-container *ngFor="let i of [].constructor(totalPages()); let idx = index">
+              <button (click)="goTo(idx + 1)"
+                      [ngClass]="page() === idx + 1 ? 'bg-primary-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'"
+                      class="px-3 py-1 rounded border text-sm">
+                {{ idx + 1 }}
+              </button>
+            </ng-container>
+          </nav>
+
+          <button (click)="next()" [disabled]="page() === totalPages()"
+                  class="px-3 py-1 rounded border bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 text-sm">
+            Siguiente
+          </button>
+
+          <select #ps (change)="setPageSize(+ps.value)" class="ml-3 px-2 py-1 border rounded bg-white text-sm">
+            <option [selected]="pageSize() === 8" value="8">8 / página</option>
+            <option [selected]="pageSize() === 12" value="12">12 / página</option>
+            <option [selected]="pageSize() === 24" value="24">24 / página</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Nuevo Registro -->
+    <div *ngIf="showModal()" class="fixed inset-0 z-70 flex items-center justify-center bg-black/50 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-3 border-b">
+          <h3 class="text-lg font-semibold">Nuevo Registro de Alumno</h3>
+          <button (click)="cancel()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
+        </div>
+        <div class="p-6 space-y-4">
+          <!-- Combo cursos -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Curso</label>
+            <select [(ngModel)]="nuevoRegistro.cursoId" class="mt-1 block w-full border rounded p-2">
+              <option value="0" disabled>Seleccione un curso</option>
+              <option *ngFor="let c of cursos" [value]="c.id">{{ c.nombre }}</option>
+            </select>
+          </div>
+
+          <!-- Combo alumnos -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Alumno</label>
+            <select [(ngModel)]="nuevoRegistro.alumnoId" class="mt-1 block w-full border rounded p-2">
+              <option value="0" disabled>Seleccione un alumno</option>
+              <option *ngFor="let a of alumnos" [value]="a.id">{{ a.nombre }} {{ a.apellido }}</option>
+            </select>
+          </div>
+
+          <!-- Combo profesores -->
+          <div>
+            <label class="block text-sm font-medium text-slate-700">Profesor</label>
+            <select [(ngModel)]="nuevoRegistro.profesorId" class="mt-1 block w-full border rounded p-2">
+              <option value="0" disabled>Seleccione un profesor</option>
+              <option *ngFor="let p of profesores" [value]="p.id">{{ p.nombre }} {{ p.apellido }}</option>
+            </select>
+          </div>
+
+          <div class="flex justify-end gap-2">
+            <button (click)="cancel()" class="px-4 py-2 bg-gray-200 rounded">Cancelar</button>
+            <button (click)="save()" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Detalle -->
+    <div *ngIf="showDetail()" class="fixed inset-0 z-80 flex items-center justify-center bg-black/50 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-lg overflow-hidden">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+          <h3 class="text-lg font-semibold">Detalle del Registro</h3>
+          <button (click)="closeDetail()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
+        </div>
+        <div class="p-6 space-y-3 text-sm text-slate-700">
+          <div><span class="font-medium">ID:</span> {{ registroEnVista()?.id }}</div>
+          <div><span class="font-medium">Alumno:</span> {{ registroEnVista()?.nombreAlumno }} ({{ registroEnVista()?.codigoAlumno }})</div>
+          <div><span class="font-medium">Curso:</span> {{ registroEnVista()?.nombreCurso }}</div>
+          <div><span class="font-medium">Profesor:</span> {{ registroEnVista()?.nombreProfesor }}</div>
+          <div><span class="font-medium">Fecha inscripción:</span> {{ registroEnVista()?.fechaInscripcion | date:'fullDate' }}</div>
+        </div>
+        <div class="px-6 py-4 border-t text-right">
+          <button (click)="closeDetail()" class="px-3 py-1 bg-white border rounded hover:bg-slate-50 text-sm">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Confirmar Eliminación -->
+    <div *ngIf="showDeleteConfirm()" class="fixed inset-0 z-90 flex items-center justify-center bg-black/60 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+        <div class="px-6 py-5 flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+              <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4m0 4h.01"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-semibold text-gray-900">Confirmar eliminación</h3>
+            <p class="mt-1 text-sm text-gray-600">
+              ¿Estás seguro que deseas eliminar el registro de
+              <span class="font-medium text-gray-800">"{{ registroParaEliminar()?.nombreAlumno }}"</span> en el curso
+              <span class="font-medium text-gray-800">"{{ registroParaEliminar()?.nombreCurso }}"</span>?
+            </p>
+
+            <div class="mt-4 flex items-center justify-end gap-3">
+              <button (click)="cancelDelete()"
+                      class="px-4 py-2 bg-white border rounded hover:bg-gray-50 text-sm">
+                Cancelar
+              </button>
+
+              <button (click)="confirmDeleteYes()"
+                      class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm flex items-center gap-2">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

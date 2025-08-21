@@ -1,1 +1,14 @@
-<p>admin-layout works!</p>
+<div class="min-h-screen flex flex-col">
+  <app-admin-navbar></app-admin-navbar>
+
+  <!-- main ocupa el espacio restante -->
+  <main [ngClass]="sidebarCollapsed() ? 'pt-16 md:pl-16' : 'pt-16 md:pl-64'"
+        class="flex-1 transition-all duration-200">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- wrapper para asegurar que footer quede al final -->
+  <div class="mt-auto">
+    <app-admin-footer></app-admin-footer>
+  </div>
+</div>

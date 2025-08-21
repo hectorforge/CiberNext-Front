@@ -1,0 +1,300 @@
+<div class="w-full px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+      <div>
+        <h1 class="text-4xl font-semibold text-slate-900">Alumnos</h1>
+        <p class="mt-1 text-base text-slate-500">Gestión y detalle de alumnos</p>
+      </div>
+      <button (click)="openNew()"
+              class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
+        Nuevo Alumno
+      </button>
+    </div>
+
+    <!-- Tabla -->
+    <div class="bg-white rounded-lg shadow ring-1 ring-slate-100 overflow-hidden">
+      <div class="w-full overflow-x-auto">
+        <table class="min-w-full text-base table-auto">
+          <thead class="bg-slate-50 border-b">
+            <tr>
+              <th class="px-4 py-3 text-left text-sm font-semibold">ID</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Código</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Nombre</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Apellido</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">Email</th>
+              <th class="px-4 py-3 text-left text-sm font-semibold">País</th>
+              <th class="px-4 py-3 text-center text-sm font-semibold">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            <tr *ngFor="let a of pagedAlumnos()" class="hover:bg-slate-50">
+              <td class="px-4 py-4">{{ a.id }}</td>
+              <td class="px-4 py-4">{{ a.codigoAlumno }}</td>
+              <td class="px-4 py-4">{{ a.nombre }}</td>
+              <td class="px-4 py-4">{{ a.apellido }}</td>
+              <td class="px-4 py-4">{{ a.email }}</td>
+              <td class="px-4 py-4">{{ a.pais }}</td>
+
+              <td class="px-4 py-4 text-center">
+                <div class="flex gap-2 justify-center">
+                  <button class="px-3 py-1 bg-amber-400 hover:bg-amber-500 rounded-md text-sm"
+                          type="button"
+                          (click)="openEdit(a)">
+                    Editar
+                  </button>
+
+                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
+                          type="button"
+                          (click)="confirmDelete(a)">
+                    Eliminar
+                  </button>
+
+                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm"
+                          type="button"
+                          (click)="openCursos(a)">
+                    Cursos
+                  </button>
+
+                  <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md text-sm text-slate-800"
+                          type="button"
+                          (click)="openDetail(a)">
+                    Detalle
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="pagedAlumnos().length === 0">
+              <td colspan="7" class="px-4 py-12 text-center text-sm text-slate-500">
+                No hay alumnos para mostrar.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Paginación -->
+      <div class="px-4 py-3 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="text-sm text-slate-600">
+          Mostrando
+          <span class="font-medium text-slate-800">{{ ((pageSize() * (page() - 1)) + 1) }}</span>
+          -
+          <span class="font-medium text-slate-800">{{ Math.min(pageSize() * page(), totalItems()) }}</span>
+          de <span class="font-medium text-slate-800">{{ totalItems() }}</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button (click)="prev()" [disabled]="page() === 1"
+                  class="px-3 py-1 rounded border bg-white text-slate-700 hover:bg-slate-100 disabled:opacity-50 text-sm">
+            Anterior
+          </button>
+
+          <nav class="flex items-center space-x-2">
+            <ng-container *ngFor="let i of [].constructor(totalPages()); let idx = index">
+              <button (click)="goTo(idx + 1)"
+                      [ngClass]="page() === idx + 1 ? 'bg-primary-600 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'"
+                      class="px-3 py-1 rounded border text-sm">
+                {{ idx + 1 }}
+              </button>
+            </ng-container>
+          </nav>
+
+          <button (click)="next()" [disabled]="page() === totalPages()"
+                  class="px-3 py-1 rounded border bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-50 text-sm">
+            Siguiente
+          </button>
+
+          <select #ps (change)="setPageSize(+ps.value)" class="ml-3 px-2 py-1 border rounded bg-white text-sm">
+            <option [selected]="pageSize() === 6" value="6">6 / página</option>
+            <option [selected]="pageSize() === 12" value="12">12 / página</option>
+            <option [selected]="pageSize() === 24" value="24">24 / página</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Cursos (mantener visual) -->
+    <div *ngIf="showCursos()" class="fixed inset-0 z-60 flex items-center justify-center bg-black/50 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold">Cursos del alumno</h3>
+            <p class="text-sm text-gray-600">{{ alumnoEnVista?.nombre }} {{ alumnoEnVista?.apellido }}</p>
+          </div>
+          <button (click)="closeCursos()" class="text-gray-500 hover:text-gray-700">Cerrar ✕</button>
+        </div>
+
+        <div class="p-6">
+          <ul *ngIf="cursos().length > 0; else noCursos" class="space-y-3">
+            <li *ngFor="let c of cursos()" class="p-3 border rounded-md hover:shadow-sm">
+              <div class="flex items-start gap-4">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <div class="font-medium text-gray-800">{{ c.nombre }}</div>
+                    <div class="text-xs text-gray-500">{{ c.codigo }}</div>
+                  </div>
+                  <p class="mt-2 text-sm text-gray-600 line-clamp-3 break-words">{{ c.descripcion }}</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <ng-template #noCursos>
+            <p class="text-center text-sm text-gray-500">No se encontraron cursos.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Nuevo / Editar Alumno (visual: dynamic form en 2 columnas + panel derecho compacto) -->
+    <div *ngIf="selectedAlumnoValue" class="fixed inset-0 z-70 flex items-center justify-center bg-black/50 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-3 border-b">
+          <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.645 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold">{{ selectedAlumnoValue?.id ? 'Editar Alumno' : 'Nuevo Alumno' }}</h3>
+              <p class="text-sm text-slate-500">Rellena los datos y pulsa Guardar.</p>
+            </div>
+          </div>
+          <button (click)="cancel()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
+        </div>
+
+        <!-- estilos visuales locales: intenta distribuir campos en 2 columnas -->
+        <style>
+          ::ng-deep app-dynamic-form form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+            align-items: start;
+          }
+          ::ng-deep app-dynamic-form .field-full { grid-column: 1 / -1; }
+          ::ng-deep app-dynamic-form .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: .5rem;
+          }
+        </style>
+
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Formulario (ocupa 2/3) -->
+            <div class="md:col-span-2">
+              <div class="bg-slate-50 border border-slate-100 rounded-lg p-4">
+                <app-dynamic-form
+                  #dynFormRef
+                  [fields]="fields"
+                  [initialData]="selectedAlumnoValue"
+                  submitLabel="Guardar"
+                  (formSubmit)="save($event)">
+                </app-dynamic-form>
+              </div>
+            </div>
+
+            <!-- Panel derecho compacto -->
+            <aside class="md:col-span-1 flex flex-col gap-4">
+              <div class="border rounded-lg p-4 bg-white shadow-sm flex items-center gap-4">
+                <div class="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-lg font-medium">
+                  {{ (selectedAlumnoValue?.nombre || '').charAt(0) }}{{ (selectedAlumnoValue?.apellido || '').charAt(0) }}
+                </div>
+                <div class="min-w-0">
+                  <div class="font-medium text-slate-800 truncate">{{ selectedAlumnoValue?.nombre }} {{ selectedAlumnoValue?.apellido }}</div>
+                  <div class="text-xs text-slate-500 truncate">{{ selectedAlumnoValue?.codigoAlumno || selectedAlumnoValue?.dni || '' }}</div>
+                </div>
+              </div>
+
+              <div class="border rounded-lg p-4 bg-white shadow-sm mt-auto">
+                <div class="flex flex-col gap-3">
+                  <button type="button"
+                          class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-md text-sm font-medium"
+                          (click)="saveClick()">
+                    Guardar
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-xs text-slate-500">Tip: completa los campos obligatorios antes de guardar.</div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Confirmación de eliminación (mantener) -->
+    <div *ngIf="showDeleteConfirm()" class="fixed inset-0 z-80 flex items-center justify-center bg-black/60 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+        <div class="px-6 py-5 flex items-start gap-4">
+          <div class="flex-shrink-0">
+            <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+              <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4m0 4h.01"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0">
+            <h3 class="text-lg font-semibold text-gray-900">Confirmar eliminación</h3>
+            <p class="mt-1 text-sm text-gray-600">
+              ¿Estás seguro que deseas eliminar al alumno
+              <span class="font-medium text-gray-800">"{{ alumnoParaEliminar()?.nombre }} {{ alumnoParaEliminar()?.apellido }}"</span>?
+              Esta acción no se puede deshacer.
+            </p>
+
+            <div class="mt-4 flex items-center justify-end gap-3">
+              <button (click)="cancelDelete()" class="px-4 py-2 bg-white border rounded hover:bg-gray-50 text-sm">Cancelar</button>
+
+              <button (click)="confirmDeleteYes()" [disabled]="deleting()"
+                      class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm flex items-center gap-2">
+                <span *ngIf="!deleting()">Eliminar</span>
+                <span *ngIf="deleting()">Eliminando...</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Detalle Alumno (visual, usa alumnoEnVista y showDetail()) -->
+    <div *ngIf="showDetail()" class="fixed inset-0 z-90 flex items-center justify-center bg-black/50 p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden">
+        <div class="px-5 py-3 border-b flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold">Detalle del Alumno</h3>
+            <p class="text-sm text-slate-500">{{ alumnoEnVista?.nombre }} {{ alumnoEnVista?.apellido }}</p>
+          </div>
+          <button (click)="closeDetail()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
+        </div>
+
+        <div class="p-4 space-y-3 text-sm text-slate-700">
+          <div><span class="font-medium">ID:</span> {{ alumnoEnVista?.id }}</div>
+          <div><span class="font-medium">Nombre:</span> {{ alumnoEnVista?.nombre }}</div>
+          <div><span class="font-medium">Apellido:</span> {{ alumnoEnVista?.apellido }}</div>
+          <div><span class="font-medium">Email:</span> {{ alumnoEnVista?.email }}</div>
+          <div><span class="font-medium">Teléfono:</span> {{ alumnoEnVista?.telefono }}</div>
+          <div><span class="font-medium">Código:</span> {{ alumnoEnVista?.codigoAlumno }}</div>
+          <div><span class="font-medium">País:</span> {{ alumnoEnVista?.pais }}</div>
+          <div><span class="font-medium">Correo Personal:</span> {{ alumnoEnVista?.correoPersonal }}</div>
+          <div *ngIf="alumnoEnVista?.fotoPerfil">
+            <span class="font-medium">Foto Perfil:</span>
+            <div class="mt-2">
+              <img [src]="alumnoEnVista?.fotoPerfil" alt="foto" class="w-24 h-24 object-cover rounded"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-4 py-3 border-t text-right">
+          <button (click)="closeDetail()" class="px-3 py-1 bg-white border rounded hover:bg-slate-50 text-sm">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

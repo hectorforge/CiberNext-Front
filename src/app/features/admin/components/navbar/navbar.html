@@ -1,0 +1,108 @@
+<!-- NAVBAR -->
+<nav class="bg-gradient-to-r from-[#003B6F] via-[#005B96] to-[#00A6D6] text-white shadow-md fixed top-0 left-0 right-0 z-30 md:pl-64">
+  <div class="w-full px-4 sm:px-6 lg:px-8"> <!-- cambiado: no centra con mx-auto -->
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <!-- botón móvil (hamburger) -->
+        <button (click)="toggleMenu()" aria-label="Toggle drawer"
+                class="mr-3 inline-flex items-center justify-center p-2 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-white md:hidden">
+          <svg *ngIf="!menuOpen()" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg *ngIf="menuOpen()" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <!-- botón escritorio para colapsar sidebar -->
+        <button (click)="toggleSidebar()" aria-label="Toggle sidebar"
+                class="hidden md:inline-flex mr-3 items-center justify-center p-2 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-white">
+          <!-- icono: cambiar según estado -->
+          <svg *ngIf="!sidebarCollapsed()" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          </svg>
+          <svg *ngIf="sidebarCollapsed()" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M6 18L18 12L6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+          </svg>
+        </button>
+
+        <!-- Marca alineada a la izquierda del área de contenido -->
+        <a [routerLink]="['/admin/dashboard']" class="text-2xl font-bold">CiberNext Admin</a>
+
+
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- antes: <a [routerLink]="['/logout']" ...>Cerrar sesión</a> -->
+        <button (click)="logout()" class="px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-sm text-white">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- SIDEBAR persistente en md+ (oculto en móvil).
+     Ajusta ancho según sidebarCollapsed() -->
+<aside [ngClass]="sidebarCollapsed() ? 'w-16' : 'w-64'"
+       class="hidden md:block fixed left-0 top-0 h-full 
+              bg-gradient-to-b from-[#003B6F] via-[#005B96] to-[#00A6D6] 
+              text-gray-100 shadow-md z-20 pt-16 transition-all duration-200">
+  <nav class="px-2 py-4 space-y-1">
+    <a [routerLink]="['/admin/dashboard']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Menu</span>
+    </a>
+    <a [routerLink]="['/admin/students']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Alumnos</span>
+    </a>
+    <a [routerLink]="['/admin/courses']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Cursos</span>
+    </a>
+    <a [routerLink]="['/admin/teachers']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Profesores</span>
+    </a>
+     <a [routerLink]="['/admin/documents']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Documentos</span>
+    </a>
+    <a [routerLink]="['/admin/registerStudents']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v2M12 20v2"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Registro Alumnos</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- DRAWER móvil (aparece sobre la pantalla) -->
+<div *ngIf="menuOpen()" class="fixed inset-0 z-40 md:hidden">
+  <div (click)="closeMenu()" class="absolute inset-0 bg-black/50"></div>
+
+<aside
+  class="absolute left-0 top-0 h-full w-64 
+         bg-gradient-to-b from-[#003B6F] via-[#005B96] to-[#00A6D6] 
+         text-gray-100 shadow-xl transform transition-transform duration-200"
+  [ngClass]="menuOpen() ? 'translate-x-0' : '-translate-x-full'">
+    <div class="flex items-center justify-between px-4 py-4 border-b border-gray-800">
+      <a [routerLink]="['/admin/dashboard']" (click)="closeMenu()" class="text-xl font-semibold">CiberNext Admin</a>
+      <button (click)="closeMenu()" aria-label="Cerrar" class="p-2 rounded-md hover:bg-white/5">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="px-2 py-4 space-y-1">
+      <a [routerLink]="['/admin/dashboard']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Panel</a>
+      <a [routerLink]="['/admin/menu']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Menu</a>
+      <a [routerLink]="['/admin/courses']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Cursos</a>
+      <a [routerLink]="['/admin/reports']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Reportes</a>
+       <a [routerLink]="['/admin/documents']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Documentos</a>
+      <div class="mt-4 px-3">
+        <a [routerLink]="['/logout']" (click)="closeMenu()" class="block w-full text-center px-3 py-2 rounded bg-red-600 hover:bg-red-700">Cerrar sesión</a>
+      </div>
+    </nav>
+  </aside>
+</div>
