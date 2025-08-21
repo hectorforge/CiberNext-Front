@@ -101,7 +101,7 @@
       <a [routerLink]="['/admin/reports']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Reportes</a>
        <a [routerLink]="['/admin/documents']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Documentos</a>
       <div class="mt-4 px-3">
-        <a [routerLink]="['/logout']" (click)="closeMenu()" class="block w-full text-center px-3 py-2 rounded bg-red-600 hover:bg-red-700">Cerrar sesión</a>
+        <a   (click)="logout()"  class="block w-full text-center px-3 py-2 rounded bg-red-600 hover:bg-red-700">Cerrar sesión</a>
       </div>
     </nav>
   </aside>

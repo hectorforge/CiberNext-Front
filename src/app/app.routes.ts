@@ -78,5 +78,5 @@ export const routes: Routes = [
 
   //Rutas genericas
   {path: 'unauthorized', component: Unauthorized},
-  { path: '', redirectTo: '/home', pathMatch: 'full' }
+  { path: '', redirectTo: '/auth/login', pathMatch: 'full' }
 ];

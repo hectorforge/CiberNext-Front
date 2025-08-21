@@ -41,15 +41,7 @@ export class Navbar {
   closeSidebar() { this.menuService.closeCollapsed(); }
 
   logout() {
-    // Asegúrate de que AuthService tenga logout() que borre token/session
-    if (this.auth?.logout) {
-      this.auth.logout();
-    } else {
-      // fallback: limpiar localStorage/sessionStorage si no existe logout()
-      localStorage.removeItem('auth_token');
-      sessionStorage.removeItem('auth_token');
-    }
-    // redirigir al login (ajusta la ruta si tu login está en otra ruta)
+     this.auth.logout();
     this.router.navigateByUrl('/auth/login');
   }
 }

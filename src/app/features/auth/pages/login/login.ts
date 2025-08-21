@@ -34,6 +34,9 @@ export class Login {
 
     const { email, password } = this.loginForm.value;
 
+    //Limpiamos siempre que venga al login el token del cokkies
+   
+
     this.authService.login(email!.trim(), password!.trim()).subscribe({
       next: (res) => {
         console.log('Login exitoso:', res);
@@ -54,7 +57,7 @@ export class Login {
           }
         }  else{
           console.error('Rol de usuario no reconocido');
-        }
+      }
 
       },
       error: (err) => {
