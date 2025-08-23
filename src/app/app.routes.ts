@@ -70,7 +70,7 @@ export const routes: Routes = [
     // Rutas para navegar en la pagina de profesor
     {
       path:'teacher',
-      component: AdminLayout,
+      component: AdminLayout, //Cambiar a MainLayout si se desea el mismo layout del profesor
       children:[
         {path: 'dashboard', component:DashboardTeacher,canActivate: [userGuardGuard], data: {roles : ['PROFESOR']} },
         {path: 'profesores', children: routesi, canActivate: [userGuardGuard], data: { roles: ['PROFESOR'] } }
