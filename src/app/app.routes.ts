@@ -16,7 +16,7 @@ import { Students } from '@features/admin/pages/students/students';
 import { RegisterStudents } from '@features/admin/pages/register-students/register-students';
 import { Teachers } from '@features/admin/pages/teachers/teachers';
 import { AreaSpecialization } from '@features/admin/pages/area-specialization/area-specialization';
-
+import { routesi } from '@features/profesor/profesor.router'; 
 export const routes: Routes = [
 
   // Componentes para test
@@ -72,7 +72,8 @@ export const routes: Routes = [
       path:'teacher',
       component: AdminLayout,
       children:[
-        {path: 'dashboard', component:DashboardTeacher,canActivate: [userGuardGuard], data: {roles : ['PROFESOR']} }
+        {path: 'dashboard', component:DashboardTeacher,canActivate: [userGuardGuard], data: {roles : ['PROFESOR']} },
+        {path: 'profesores', children: routesi, canActivate: [userGuardGuard], data: { roles: ['PROFESOR'] } }
       ]
     },
 

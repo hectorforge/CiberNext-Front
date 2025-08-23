@@ -1,0 +1,50 @@
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto">
+    <div class="flex flex-col items-center text-center mb-12">
+      <svg class="w-12 h-12 text-blue-600 mb-2" fill="none" stroke="currentColor" stroke-width="2"
+        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M5.121 17.804A13.937 13.937 0 0112 15c2.577 0 4.979.732 6.879 1.987M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M19.071 4.929A10 10 0 104.93 19.07 10 10 0 0019.07 4.93z"></path>
+      </svg>
+      <h1 class="text-3xl font-bold title-font text-gray-900">Detalle del Profesor</h1>
+      <p class="mt-2 text-base leading-relaxed text-gray-500">Información detallada del docente registrado.</p>
+    </div>
+
+    <div *ngIf="profesor" class="mx-auto max-w-2xl bg-white p-8 rounded-lg shadow-md">
+      <div class="flex flex-col md:flex-row items-center mb-6">
+        <img *ngIf="profesor.fotoPerfil" [src]="profesor.fotoPerfil" alt="Foto de perfil"
+          class="w-32 h-32 rounded-full object-cover mr-0 md:mr-6 mb-4 md:mb-0 border-2 border-gray-300 shadow-sm">
+        <div class="text-center md:text-left">
+          <h2 class="text-xl font-semibold text-gray-800">{{ profesor.nombre }} {{ profesor.apellido }}</h2>
+          <p class="text-sm text-gray-500">{{ profesor.codigoProfesor }} - DNI: {{ profesor.dni }}</p>
+          <p class="text-sm text-gray-500 mt-1">📧 {{ profesor.correo }}</p>
+          <p class="text-sm text-gray-500">💼 {{ profesor.correoProfesional }}</p>
+          <p class="text-sm text-gray-500 mt-2">📞 {{ profesor.telefono }}</p>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <h3 class="text-gray-700 font-medium mb-1">Biografía:</h3>
+        <p class="text-gray-600 bg-gray-50 p-4 rounded-md">{{ profesor.biografia }}</p>
+      </div>
+
+      <div class="mt-6 text-center">
+        <a routerLink="/teacher/profesores"
+          class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition duration-300">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Volver a la lista
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="!profesor" class="text-center text-gray-500 mt-10">
+      <p class="text-lg">Cargando datos del profesor...</p>
+    </div>
+  </div>
+</section>
+

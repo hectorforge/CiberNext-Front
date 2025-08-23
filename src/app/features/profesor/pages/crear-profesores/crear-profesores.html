@@ -1,0 +1,84 @@
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-16 mx-auto max-w-2xl">
+    <div class="text-center mb-10">
+      <h1 class="text-3xl font-semibold text-gray-900 inline-flex items-center justify-center">
+        <svg class="w-8 h-8 mr-2 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 4v16m8-8H4"></path>
+        </svg>
+        Crear Profesor
+      </h1>
+      <p class="mt-2 text-gray-500">Complete los campos para registrar un nuevo profesor.</p>
+    </div>
+
+    <form (ngSubmit)="guardar()" #profesorForm="ngForm" class="bg-white p-8 rounded-lg shadow-md space-y-6">
+      <!-- Campo -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" type="text" required [(ngModel)]="profesor.nombre"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="apellido">Apellido</label>
+        <input id="apellido" name="apellido" type="text" required [(ngModel)]="profesor.apellido"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="dni">DNI</label>
+        <input id="dni" name="dni" type="text" required [(ngModel)]="profesor.dni"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="telefono">Teléfono</label>
+        <input id="telefono" name="telefono" type="tel" required [(ngModel)]="profesor.telefono"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="correo">Correo</label>
+        <input id="correo" name="correo" type="email" required [(ngModel)]="profesor.correo"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="codigoProfesor">Código Profesor</label>
+        <input id="codigoProfesor" name="codigoProfesor" type="text" required [(ngModel)]="profesor.codigoProfesor"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="correoProfesional">Correo Profesional</label>
+        <input id="correoProfesional" name="correoProfesional" type="email" required [(ngModel)]="profesor.correoProfesional"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="biografia">Biografía</label>
+        <textarea id="biografia" name="biografia" [(ngModel)]="profesor.biografia" rows="4"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1" for="fotoPerfil">Foto de Perfil (URL)</label>
+        <input id="fotoPerfil" name="fotoPerfil" type="text" [(ngModel)]="profesor.fotoPerfil"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div class="text-center">
+        <button type="submit" [disabled]="!profesorForm.form.valid"
+          class="inline-flex items-center px-6 py-2 bg-blue-600 text-white font-medium text-sm rounded-md hover:bg-blue-700 transition duration-300 disabled:opacity-50">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M5 13l4 4L19 7"></path>
+          </svg>
+          Guardar Profesor
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
