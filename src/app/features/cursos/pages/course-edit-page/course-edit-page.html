@@ -1,0 +1,10 @@
+<div class="p-6" *ngIf="initialData">
+    <h1 class="text-2xl font-bold mb-4">Editar Curso</h1>
+  
+    <app-dynamic-form [fields]="fields"
+                      [initialData]="initialData"
+                      submitLabel="Actualizar"
+                      (formSubmit)="onSubmit($event)">
+    </app-dynamic-form>
+  </div>
+  

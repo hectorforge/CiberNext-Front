@@ -24,6 +24,7 @@ import { DynamicField } from '@shared/models/dynamic-field';
 export class CreateProductComponent {
 
   fields: DynamicField[] = [
+    /*
     {
       id: 1,
       name: 'name',
@@ -59,7 +60,7 @@ export class CreateProductComponent {
       label: 'Descripción',
       placeholder: 'Agrega detalles...',
       validators: [Validators.required]
-    }
+    }*/
   ];
 
   handleSubmit(values: any) {

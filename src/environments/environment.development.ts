@@ -6,6 +6,9 @@ export const environment = {
     apiURLCursos: 'http://localhost:8080/api/cursos',
     apiURLProfesores: 'http://localhost:8080/api/profesores',
     apiURLRegistroAlumno: 'http://localhost:8080/api/registro-alumno',
-    apiURLUsers: 'http://localhost:8080/api/users'
+    apiURLUsers: 'http://localhost:8080/api/users',
+    apiURLDocumentos: 'http://localhost:8080/api/documentos',
+    apiURLUnidades: 'http://localhost:8080/api/unidades',
+
     // Mas rutas que solo llaramas con la clave
 };

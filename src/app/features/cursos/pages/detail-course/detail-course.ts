@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Importa CommonModule para *ngFor
+import { CommonModule } from '@angular/common';
+import { CourseService } from '@features/cursos/services/course-service';
+import { Course } from '@features/cursos/models/Course';
+import { Document } from '@features/cursos/models/Document';
+import { UnidadAprendizaje } from '@features/cursos/models/UnidadAprendizaje';
 
 interface Clase {
   titulo: string;
@@ -13,10 +18,6 @@ interface Seccion {
   clases: Clase[];
 }
 
-interface Curso {
-  titulo: string;
-}
-
 @Component({
   selector: 'app-detail-course',
   standalone: true,
@@ -24,36 +25,52 @@ interface Curso {
   templateUrl: './detail-course.html'
 })
 export class DetailCourse implements OnInit {
-  curso!: Curso;
+  curso!: Course;
+  documentos: Document[] = [];
+  unidades: UnidadAprendizaje[] = [];
   videoUrl!: string;
-  secciones!: Seccion[];
+  secciones: Seccion[] = [];
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private courseService: CourseService
+  ) {}
 
   ngOnInit(): void {
-    this.curso = {
-      titulo: 'Spring Framework 6 & Spring Boot 3 desde cero a experto'
-    };
+    const courseId = Number(this.route.snapshot.paramMap.get('id'));
+    if (!courseId) return;
 
-    this.videoUrl = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
-
-    this.secciones = [
-      {
-        titulo: 'Sección 1: Introducción al curso',
-        abierta: false,
-        clases: [
-          { titulo: '1. Creando un proyecto web con Spring Boot', duracion: '9 min' }
-        ]
+    this.courseService.getById(courseId).subscribe({
+      next: (data: Course) => {
+        this.curso = data;
+        this.videoUrl = 'https://www.youtube.com/embed/dQw4w9WgXcQ'; 
       },
-      {
-        titulo: 'Sección 2: Spring MVC',
-        abierta: true,
-        clases: [
-          { titulo: '10. Creando un proyecto Web con Spring Boot', duracion: '9 min' },
-          { titulo: '11. Estructura de una aplicación Spring Boot', duracion: '13 min' },
-          { titulo: '12. Creando el controlador', duracion: '12 min' }
-        ]
-      }
-    ];
+      error: (err) => console.error('Error al cargar curso', err)
+    });
+
+    this.courseService.getUnidadesJerarquico(courseId).subscribe({
+      next: (unidad: UnidadAprendizaje) => {
+        this.unidades = [unidad];
+
+        // de cada unidad, cargar documentos
+        this.unidades.forEach(u => {
+          this.courseService.getDocumentsByUnidad(u.id).subscribe({
+            next: (docs: Document[]) => {
+              this.documentos.push(...docs);
+              this.secciones.push({
+                titulo: u.nombre,
+                abierta: false,
+                clases: docs.map(d => ({
+                  titulo: d.nombre,
+                  duracion: d.descripcion || 'Sin descripción'
+                }))
+              });
+            },
+            error: (err) => console.error(`Error al cargar documentos de la unidad ${u.id}`, err)
+          });
+        });
+      },
+      error: (err) => console.error('Error al cargar unidades', err)
+    });
   }
 }

@@ -1,0 +1,36 @@
+<div class="p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold">Cursos</h1>
+      <a routerLink="/courses/create"
+         class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700">
+        + Nuevo Curso
+      </a>
+    </div>
+  
+    <div *ngIf="loading">Cargando...</div>
+  
+    <table class="w-full border-collapse" *ngIf="!loading">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="p-2 border">ID</th>
+          <th class="p-2 border">Código</th>
+          <th class="p-2 border">Nombre</th>
+          <th class="p-2 border">Descripción</th>
+          <th class="p-2 border">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of courses">
+          <td class="p-2 border">{{ c.id }}</td>
+          <td class="p-2 border">{{ c.codigo }}</td>
+          <td class="p-2 border">{{ c.nombre }}</td>
+          <td class="p-2 border">{{ c.descripcion }}</td>
+          <td class="p-2 border flex gap-2">
+            <a [routerLink]="['/courses', c.id]" class="text-blue-600">Ver</a>
+            <a [routerLink]="['/courses/edit', c.id]" class="text-yellow-600">Editar</a>
+            <button (click)="deleteCourse(c.id)" class="text-red-600">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
