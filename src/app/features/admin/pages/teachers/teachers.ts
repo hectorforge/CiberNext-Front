@@ -57,6 +57,13 @@ export class Teachers {
   profesorParaEliminar = signal<ProfesorDto | null>(null);
   deleting = signal(false);
 
+  // Modal de consultas
+  showConsultasModal = false;
+  consultasTipo: 'respondidas' | 'no-respondidas' = 'no-respondidas';
+  consultas: any[] = [];
+  consultasLoading = false;
+  profesorEnConsultas: any = null;
+
   constructor(public teachersService: TeachersService) {
     // carga inicial
     if ((this.teachersService as any).load) {
@@ -236,6 +243,42 @@ export class Teachers {
       this.deleting.set(false);
       this.cancelDelete();
     }
+  }
+
+  // Modal de consultas
+  abrirConsultas(profesor: any) {
+    this.profesorEnConsultas = profesor;
+    this.consultasTipo = 'no-respondidas';
+    this.showConsultasModal = true;
+    this.cargarConsultas();
+  }
+
+  cerrarConsultas() {
+    this.showConsultasModal = false;
+    this.consultas = [];
+    this.profesorEnConsultas = null;
+    this.consultasLoading = false;
+  }
+
+  cambiarTipoConsultas(tipo: 'respondidas' | 'no-respondidas') {
+    if (this.consultasTipo === tipo) return;
+    this.consultasTipo = tipo;
+    this.cargarConsultas();
+  }
+
+  private cargarConsultas() {
+    if (!this.profesorEnConsultas?.id) { this.consultas = []; return; }
+    this.consultasLoading = true;
+    const id = this.profesorEnConsultas.id;
+    const svc: any = this.teachersService;
+    const req = this.consultasTipo === 'respondidas'
+      ? svc.listarConsultasRespondidasProfesor(id)
+      : svc.listarConsultasNoRespondidasProfesor(id);
+
+    req.subscribe({
+      next: (data: any[]) => { this.consultas = data || []; this.consultasLoading = false; },
+      error: () => { this.consultas = []; this.consultasLoading = false; }
+    });
   }
 
   // Paginación helpers

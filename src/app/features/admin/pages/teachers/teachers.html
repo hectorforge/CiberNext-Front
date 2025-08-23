@@ -38,30 +38,10 @@
               <td class="px-4 py-4 text-sm align-top">
                 <div class="flex gap-2 justify-center">
                   <!-- botones mantienen su funcionalidad -->
-                  <button class="px-3 py-1 bg-amber-400 hover:bg-amber-500 rounded-md text-sm"
-                          type="button"
-                          (click)="openEdit(p); $event.stopPropagation(); $event.preventDefault()">
-                    Editar
-                  </button>
-
-                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm"
-                          type="button"
-                          (click)="confirmDelete(p); $event.stopPropagation(); $event.preventDefault()">
-                    Eliminar
-                  </button>
-
-                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm"
-                          type="button"
-                          (click)="openCursos(p); $event.stopPropagation(); $event.preventDefault()">
-                    Cursos
-                  </button>
-
-                  <!-- Botón Detalle -->
-                  <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md text-sm text-slate-800"
-                          type="button"
-                          (click)="openDetail(p); $event.stopPropagation(); $event.preventDefault()">
-                    Detalle
-                  </button>
+                  <button class="px-3 py-1 bg-amber-400 hover:bg-amber-500 rounded-md text-sm" (click)="openEdit(p)">Editar</button>
+                  <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm" (click)="confirmDelete(p)">Eliminar</button>
+                  <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm" (click)="abrirConsultas(p)">Consultas</button>
+                  <button class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded-md text-sm text-slate-800" (click)="openDetail(p)">Detalle</button>
                 </div>
               </td>
             </tr>
@@ -262,6 +242,120 @@
 
         <div class="px-4 py-3 border-t text-right">
           <button (click)="closeDetail()" class="px-3 py-1 bg-white border rounded hover:bg-slate-50 text-sm">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Consultas del profesor (mejorado visualmente; sin "Respondida por:") -->
+    <div *ngIf="showConsultasModal" class="fixed inset-0 z-70 flex items-center justify-center bg-black/60 p-4">
+      <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl overflow-hidden max-h-[90vh] flex flex-col">
+        <!-- HEADER -->
+        <div class="px-6 py-4 border-b flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-50 text-indigo-600">
+              <!-- icono chat -->
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.84L3 20l.84-3A7.97 7.97 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+            </div>
+
+            <div class="min-w-0">
+              <h3 class="text-lg font-semibold text-slate-900 truncate">Consultas — {{ profesorEnConsultas?.nombre }} {{ profesorEnConsultas?.apellido }}</h3>
+              <p class="text-sm text-slate-500 truncate">{{ profesorEnConsultas?.codigoProfesor || profesorEnConsultas?.dni }}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button class="text-slate-500 hover:text-slate-700" (click)="cerrarConsultas()" aria-label="Cerrar">✕</button>
+          </div>
+        </div>
+
+        <!-- CONTENIDO (scrollable) -->
+        <div class="p-4 overflow-y-auto flex-1">
+          <!-- filtros -->
+          <div class="flex items-center gap-3 mb-4">
+            <div class="inline-flex rounded-md shadow-sm bg-slate-50 p-1">
+              <button (click)="cambiarTipoConsultas('no-respondidas')"
+                      [ngClass]="{'bg-white text-slate-800': consultasTipo==='no-respondidas','text-slate-600': consultasTipo!=='no-respondidas'}"
+                      class="px-3 py-1 rounded text-sm flex items-center gap-2">
+                <svg class="h-4 w-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/>
+                </svg>
+                No respondidas
+              </button>
+
+              <button (click)="cambiarTipoConsultas('respondidas')"
+                      [ngClass]="{'bg-white text-slate-800': consultasTipo==='respondidas','text-slate-600': consultasTipo!=='respondidas'}"
+                      class="px-3 py-1 rounded text-sm flex items-center gap-2">
+                <svg class="h-4 w-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                Respondidas
+              </button>
+            </div>
+
+            <div class="ml-auto text-sm text-slate-500">Total: <span class="font-medium text-slate-800">{{ consultas.length || 0 }}</span></div>
+          </div>
+
+          <div *ngIf="consultasLoading" class="text-center py-6">Cargando...</div>
+
+          <ul *ngIf="!consultasLoading && consultas?.length" class="space-y-3">
+            <li *ngFor="let c of consultas" class="border rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition">
+              <div class="flex gap-3">
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start gap-3">
+                    <div class="min-w-0">
+                      <div class="flex items-center gap-2">
+                        <div class="font-semibold text-slate-900 truncate">{{ c.titulo }}</div>
+                        <span class="text-xs text-slate-400">·</span>
+                        <div class="text-xs text-slate-500">{{ c.fecha | date:'yyyy-MM-dd' }}</div>
+                      </div>
+
+                      <div class="text-sm text-slate-600 mt-1 line-clamp-3">{{ c.mensaje }}</div>
+
+                      <div class="mt-3 flex flex-wrap gap-2 items-center">
+                        <span class="text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded">{{ c.unidad || '—' }}</span>
+                        <span class="text-xs bg-slate-50 text-slate-800 px-2 py-0.5 rounded border">{{ c.curso || '—' }}</span>
+                        <span class="text-xs text-slate-500 ml-2">Alumno: <span class="font-medium text-slate-800">{{ c.nombreAlumno || '—' }}</span></span>
+                      </div>
+                    </div>
+
+                    <!-- estado a la derecha -->
+                    <div class="ml-auto flex-shrink-0 text-right">
+                      <div *ngIf="c.respuesta" class="inline-flex items-center gap-2 text-emerald-600 font-medium text-sm">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Respondida
+                      </div>
+                      <div *ngIf="!c.respuesta" class="inline-flex items-center gap-2 text-amber-500 font-medium text-sm">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/>
+                        </svg>
+                        Sin responder
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- respuesta (si existe) -->
+                  <div *ngIf="c.respuesta" class="mt-3 p-3 bg-slate-50 rounded text-sm text-slate-700 border">
+                    <div class="font-medium mb-1">Respuesta</div>
+                    <div class="whitespace-pre-wrap">{{ c.respuesta }}</div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+
+          <div *ngIf="!consultasLoading && (!consultas || consultas.length === 0)" class="text-center text-sm text-slate-500 py-8">
+            No hay consultas para mostrar.
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="px-6 py-4 border-t flex justify-end gap-3 flex-shrink-0">
+          <button class="px-4 py-2 bg-gray-200 rounded" (click)="cerrarConsultas()">Cerrar</button>
         </div>
       </div>
     </div>

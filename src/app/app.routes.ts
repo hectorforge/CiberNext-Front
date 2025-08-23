@@ -60,7 +60,7 @@ export const routes: Routes = [
         {path: 'students', component:Students,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
         {path: 'courses', component:Courses,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
         {path: 'teachers', component:Teachers,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
-         {path: 'areaSpecialization', component:AreaSpecialization,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
+       //  {path: 'areaSpecialization', component:AreaSpecialization,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} },
         {path: 'registerStudents', component:RegisterStudents,canActivate: [userGuardGuard], data: {roles : ['ADMIN']} }
   
     ],

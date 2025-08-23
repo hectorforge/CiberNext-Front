@@ -1,33 +1,69 @@
-
 <footer [ngClass]="sidebarCollapsed() ? 'md:ml-16' : 'md:ml-64'"
-        class="bg-gradient-to-r from-[#003B6F] via-[#005B96] to-[#00A6D6] text-gray-200 py-6 transition-all duration-200">
-  <div class="w-full px-4 sm:px-6 lg:px-8"> 
-    <div class="max-w-7xl mx-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div>
-          <h2 class="text-lg font-semibold">CiberNext - Panel Admin</h2>
-          <p class="text-sm opacity-80 mt-1">Gestión de usuarios, cursos y reportes.</p>
+        class="bg-gradient-to-r from-[#003B6F] via-[#005B96] to-[#00A6D6] text-white shadow-inner py-4 transition-all duration-200">
+  <div class="w-full flex justify-center px-4">
+    <div class="w-full max-w-5xl">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start text-sm">
+
+        <!-- Marca -->
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <div class="h-8 w-8 rounded-md bg-white/10 flex items-center justify-center text-white font-semibold">CN</div>
+            <div>
+              <div class="text-base font-semibold">CiberNext</div>
+              <div class="text-xs text-white/80">Panel de administración</div>
+            </div>
+          </div>
+          <p class="text-xs text-white/70">
+            Controla usuarios, cursos y reportes desde una interfaz segura y rápida.
+          </p>
         </div>
+
+        <!-- Soporte -->
         <div>
-          <h3 class="font-medium">Administración</h3>
-          <ul class="text-sm space-y-1 mt-2">
-            <li><a [routerLink]="['/admin/users']" class="hover:text-white">Usuarios</a></li>
-            <li><a [routerLink]="['/admin/courses']" class="hover:text-white">Cursos</a></li>
-            <li><a [routerLink]="['/admin/reports']" class="hover:text-white">Reportes</a></li>
+          <h4 class="text-sm font-medium mb-1 text-white">Soporte & Políticas</h4>
+          <ul class="space-y-1">
+            <li><a [routerLink]="['/support']" class="text-white/80 hover:text-white">Contacto</a></li>
+            <li><a [routerLink]="['/status']" class="text-white/80 hover:text-white">Estado del sistema</a></li>
+            <li><a [routerLink]="['/policies']" class="text-white/80 hover:text-white">Políticas</a></li>
           </ul>
         </div>
+
+        <!-- Contacto -->
         <div>
-          <h3 class="font-medium">Soporte</h3>
-          <ul class="text-sm space-y-1 mt-2">
-            <li><a [routerLink]="['/support']" class="hover:text-white">Contacto</a></li>
-            <li><a [routerLink]="['/status']" class="hover:text-white">Estado del sistema</a></li>
-            <li><a [routerLink]="['/policies']" class="hover:text-white">Políticas</a></li>
-          </ul>
+          <h4 class="text-sm font-medium mb-1 text-white">Contacto</h4>
+          <div class="space-y-1 text-white/80">
+            <div>
+              <span class="text-xs">Email:</span>
+              <a href="mailto:soporte@cibernext.example" class="hover:underline"> soporte@cibernext.example</a>
+            </div>
+            <div>
+              <span class="text-xs">Tel:</span>
+              <a href="tel:+34123456789" class="hover:underline"> +34 123 456 789</a>
+            </div>
+          </div>
+
+          <!-- Redes -->
+          <div class="mt-2">
+            <span class="text-xs text-white/70">Síguenos</span>
+            <div class="flex gap-2 mt-1">
+              <a class="p-1.5 rounded-md bg-white/10 hover:bg-white/20" aria-label="Twitter" href="#">
+                <svg class="h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.92c-.64.28-1.33.47-2.05.56"/></svg>
+              </a>
+              <a class="p-1.5 rounded-md bg-white/10 hover:bg-white/20" aria-label="LinkedIn" href="#">
+                <svg class="h-3.5 w-3.5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="border-t border-gray-800 mt-6 pt-4 text-center text-sm text-gray-400">
-        © 2025 CiberNext. Administrador — Todos los derechos reservados.
+      <!-- Línea inferior -->
+      <div class="mt-4 border-t border-white/10 pt-2 flex flex-col sm:flex-row items-center justify-between text-xs text-white/70">
+        <div>© 2025 CiberNext. Todos los derechos reservados.</div>
+        <div class="flex items-center gap-3">
+          <a [routerLink]="['/terms']" class="hover:text-white">Términos</a>
+          <a [routerLink]="['/privacy']" class="hover:text-white">Privacidad</a>
+        </div>
       </div>
     </div>
   </div>

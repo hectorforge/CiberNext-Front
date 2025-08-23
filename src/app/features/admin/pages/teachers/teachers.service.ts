@@ -50,4 +50,13 @@ export class TeachersService {
   listarCursosPorProfesor(idProfesor: number) {
     return this.http.get<any[]>(`${this.api}/${idProfesor}/cursos`);
   }
+
+  // Consultas respondidas / no-respondidas
+  listarConsultasRespondidasProfesor(idProfesor: number) {
+    return this.http.get<any[]>(`${this.api}/${idProfesor}/respondidas`);
+  }
+
+  listarConsultasNoRespondidasProfesor(idProfesor: number) {
+    return this.http.get<any[]>(`${this.api}/${idProfesor}/no-respondidas`);
+  }
 }
