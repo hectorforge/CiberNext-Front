@@ -4,6 +4,7 @@ import {MainLayout} from './shared/layouts/main-layout/main-layout';
 import {DetailCourse} from './features/cursos/pages/detail-course/detail-course';
 import { userGuardGuard } from './core/guards/user-guard-guard';
 import { AdminLayout } from './shared/layouts/admin-layout/admin-layout';
+import { TeacherLayout } from './shared/layouts/teacher-layout/teacher-layout';
 import {DashboardAdmin } from '@features/admin/pages/dashboard';
 import { Unauthorized } from './features/public/pages/unauthorized/unauthorized';
 import { Contact } from '@features/public/pages/contact/contact';
@@ -70,7 +71,7 @@ export const routes: Routes = [
     // Rutas para navegar en la pagina de profesor
     {
       path:'teacher',
-      component: AdminLayout, //Cambiar a MainLayout si se desea el mismo layout del profesor
+      component: TeacherLayout, 
       children:[
         {path: 'dashboard', component:DashboardTeacher,canActivate: [userGuardGuard], data: {roles : ['PROFESOR']} },
         {path: 'profesores', children: routesi, canActivate: [userGuardGuard], data: { roles: ['PROFESOR'] } }

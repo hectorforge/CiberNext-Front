@@ -1,0 +1,33 @@
+<footer [ngClass]="sidebarCollapsed() ? 'md:ml-16' : 'md:ml-64'"
+        class="bg-gradient-to-r from-[#003B6F] via-[#005B96] to-[#00A6D6] text-gray-200 py-6 transition-all duration-200">
+  <div class="w-full px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div>
+          <h2 class="text-lg font-semibold">CiberNext - Panel Profesor</h2>
+          <p class="text-sm opacity-80 mt-1">Gestión de cursos, profesores y contenidos.</p>
+        </div>
+        <div>
+          <h3 class="font-medium">Enlaces rápidos</h3>
+          <ul class="text-sm space-y-1 mt-2">
+            <li><a [routerLink]="['/teacher/dashboard']" class="hover:text-white">Dashboard</a></li>
+            <li><a [routerLink]="['/teacher/profesores']" class="hover:text-white">Profesores</a></li>
+            <!-- <li><a [routerLink]="['/teacher/courses']" class="hover:text-white">Cursos</a></li> -->
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-medium">Soporte</h3>
+          <ul class="text-sm space-y-1 mt-2">
+            <li><a [routerLink]="['/cibernext/contact']" class="hover:text-white">Contacto</a></li>
+            <li><a [routerLink]="['/status']" class="hover:text-white">Estado del sistema</a></li>
+            <li><a [routerLink]="['/policies']" class="hover:text-white">Políticas</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-800 mt-6 pt-4 text-center text-sm text-gray-400">
+        © 2025 CiberNext. Panel Profesor — Todos los derechos reservados.
+      </div>
+    </div>
+  </div>
+</footer>

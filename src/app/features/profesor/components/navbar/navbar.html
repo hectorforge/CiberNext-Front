@@ -1,0 +1,88 @@
+<!-- NAVBAR -->
+<nav class="bg-gradient-to-r from-[#003B6F] via-[#005B96] to-[#00A6D6] text-white shadow-md fixed top-0 left-0 right-0 z-30 md:pl-64">
+  <div class="w-full px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <!-- Botón móvil -->
+        <button (click)="toggleMenu()" aria-label="Toggle drawer"
+                class="mr-3 inline-flex items-center justify-center p-2 rounded-md text-gray-200 focus:outline-none md:hidden">
+          <svg *ngIf="!menuOpen()" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg *ngIf="menuOpen()" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <!-- Botón escritorio -->
+        <button (click)="toggleSidebar()" aria-label="Toggle sidebar"
+                class="hidden md:inline-flex mr-3 items-center justify-center p-2 rounded-md text-gray-200">
+          <svg *ngIf="!sidebarCollapsed()" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg *ngIf="sidebarCollapsed()" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 12L6 6"/>
+          </svg>
+        </button>
+
+        <!-- Marca -->
+        <a [routerLink]="['/teacher/dashboard']" class="text-2xl font-bold">CiberNext Panel</a>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button (click)="logout()" class="px-3 py-2 rounded bg-red-600 hover:bg-red-700 text-sm">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- SIDEBAR escritorio -->
+<aside [ngClass]="sidebarCollapsed() ? 'w-16' : 'w-64'"
+       class="hidden md:block fixed left-0 top-0 h-full 
+              bg-gradient-to-b from-[#003B6F] via-[#005B96] to-[#00A6D6] 
+              text-gray-100 pt-16 shadow-md z-20 transition-all duration-200">
+  <nav class="px-2 py-4 space-y-1">
+    <a [routerLink]="['/teacher/dashboard']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3h18v18H3z"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Inicio</span>
+    </a>
+    <a [routerLink]="['/teacher/profesores']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Profesores</span>
+    </a>
+   <!-- <a [routerLink]="['/teacher/courses']" class="flex items-center px-4 py-2 rounded hover:bg-white/5">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <span *ngIf="!sidebarCollapsed()" class="ml-3">Cursos</span>
+    </a> -->
+  </nav>
+</aside>
+
+<!-- DRAWER móvil -->
+<div *ngIf="menuOpen()" class="fixed inset-0 z-40 md:hidden">
+  <div (click)="closeMenu()" class="absolute inset-0 bg-black/50"></div>
+
+  <aside class="absolute left-0 top-0 h-full w-64 
+                bg-gradient-to-b from-[#003B6F] via-[#005B96] to-[#00A6D6] 
+                text-white shadow-xl transform transition-transform duration-200">
+    <div class="flex items-center justify-between px-4 py-4 border-b border-gray-800">
+      <a [routerLink]="['/teacher/dashboard']" (click)="closeMenu()" class="text-xl font-semibold">CiberNext Panel</a>
+      <button (click)="closeMenu()" aria-label="Cerrar" class="p-2 rounded-md hover:bg-white/5">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="px-2 py-4 space-y-1">
+      <a [routerLink]="['/teacher/dashboard']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Inicio</a>
+      <a [routerLink]="['/teacher/profesores']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Profesores</a>
+      <!-- <a [routerLink]="['/teacher/courses']" (click)="closeMenu()" class="block px-3 py-2 rounded hover:bg-white/5">Cursos</a> -->
+
+      <div class="mt-4 px-3">
+        <a (click)="logout()" class="block w-full text-center px-3 py-2 rounded bg-red-600 hover:bg-red-700">Cerrar sesión</a>
+      </div>
+    </nav>
+  </aside>
+</div>

@@ -29,4 +29,8 @@ export class ListarProfesoresComponent implements OnInit{
   ver(id: number) {
     this.router.navigate(['teacher/profesores/ver', id]);
   }
+
+  volver(): void {
+    this.router.navigate(['/teacher/dashboard']);
+  }
 }

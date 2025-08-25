@@ -6,7 +6,6 @@ import { VerProfesorComponent } from './pages/ver-profesores/ver-profesores';
 import { DashboardTeacher } from './pages/dashboard/dashboard';
 
 export const routesi: Routes = [
-   //{ path: '', component: DashboardTeacher },
   
   { path: '', component: ListarProfesoresComponent },
   { path: 'nuevo', component: CrearProfesorComponent },
