@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Profesor } from '../models/profesor';
 import { Observable } from 'rxjs';
+import { environment } from '@envs/environment.development'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfesorService {
-   private baseUrl = 'http://localhost:8080/api/profesores';
+    private baseUrl = environment.apiURLProfesores; 
 
   constructor(private http: HttpClient) {}
 
@@ -19,8 +20,8 @@ export class ProfesorService {
     return this.http.get<Profesor>(`${this.baseUrl}/${id}`);
   }
 
-  registrar(profesor: Profesor): Observable<Profesor> {
-    return this.http.post<Profesor>(this.baseUrl, profesor);
+  registrarProfesor(profesor: Profesor): Observable<Profesor> {
+   return this.http.post<Profesor>(this.baseUrl, profesor);
   }
 
   actualizar(id: number, profesor: Profesor): Observable<Profesor> {

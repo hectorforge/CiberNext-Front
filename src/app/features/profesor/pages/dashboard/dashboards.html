@@ -28,20 +28,7 @@
         </div>
       </div>
 
-      <!-- Card: Crear Profesor -->
-      <div class="p-4 md:w-1/2 lg:w-1/4 w-full">
-        <div class="border-2 border-gray-200 px-4 py-6 rounded-lg hover:shadow-lg transition">
-          <div class="text-5xl mb-3">➕</div>
-          <h2 class="title-font font-medium text-2xl text-gray-900">Crear</h2>
-          <p class="leading-relaxed text-base mb-4">Registrar un nuevo profesor en la plataforma</p>
-          <a routerLink="/teacher/profesores/nuevo" class="text-indigo-500 inline-flex items-center hover:underline">
-            Ir
-            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
-        </div>
-      </div>
+    
 
       <!-- Card: Editar Profesor -->
       <div class="p-4 md:w-1/2 lg:w-1/4 w-full">
@@ -49,7 +36,7 @@
           <div class="text-5xl mb-3">✏️</div>
           <h2 class="title-font font-medium text-2xl text-gray-900">Editar</h2>
           <p class="leading-relaxed text-base mb-4">Modificar información de profesores existentes</p>
-          <a routerLink="/teacher/profesores/editar/:id" class="text-indigo-500 inline-flex items-center hover:underline">
+          <a [routerLink]="['/teacher/profesores/editar', 3]" class="text-indigo-500 inline-flex items-center hover:underline">
             Ir
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"></path>
@@ -64,7 +51,7 @@
           <div class="text-5xl mb-3">👁️</div>
           <h2 class="title-font font-medium text-2xl text-gray-900">Ver</h2>
           <p class="leading-relaxed text-base mb-4">Consultar detalles individuales del profesor</p>
-          <a routerLink="/teacher/profesores/ver/:id" class="text-indigo-500 inline-flex items-center hover:underline">
+          <a [routerLink]="['/teacher/profesores/ver', 3]" class="text-indigo-500 inline-flex items-center hover:underline">
             Ir
             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"></path>
@@ -74,11 +61,6 @@
       </div>
 
     </div>
-
-    <!-- Botón principal al final -->
-    <button class="flex mx-auto mt-16 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-      Volver al Panel Principal
-    </button>
 
   </div>
 </section>

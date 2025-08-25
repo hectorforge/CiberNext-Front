@@ -49,7 +49,7 @@ export class Login {
             this.router.navigate(['/home']);
           }
           else if(roles.includes('PROFESOR')) {
-            this.router.navigate(['/teacher']);
+            this.router.navigate(['/teacher/dashboard']);
           }
           else if (roles.includes('ADMIN')) {
           console.log('Usuario con rol ADMIN');
