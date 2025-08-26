@@ -24,11 +24,9 @@ export class Students {
     { id: 3, name: 'dni', label: 'DNI', type: 'text', placeholder: 'DNI', validators: [] },
     { id: 4, name: 'telefono', label: 'Teléfono', type: 'text', placeholder: 'Teléfono', validators: [] },
     { id: 5, name: 'email', label: 'Email', type: 'email', placeholder: 'correo@dominio.com', validators: [Validators.required, Validators.email] },
-    { id: 6, name: 'codigoAlumno', label: 'Código Alumno', type: 'text', placeholder: 'Código', validators: [] },
-    { id: 7, name: 'correoPersonal', label: 'Correo Personal', type: 'email', placeholder: 'personal@dominio.com', validators: [Validators.email] },
-    { id: 8, name: 'pais', label: 'País', type: 'text', placeholder: 'País', validators: [] },
-    { id: 9, name: 'fotoPerfil', label: 'Foto Perfil (URL)', type: 'text', placeholder: 'https://...', validators: [] },
-    { id: 10, name: 'rolId', label: 'Rol (ID)', type: 'number', placeholder: '3', validators: [] }
+    { id: 6, name: 'pais', label: 'País', type: 'text', placeholder: 'País', validators: [] },
+    { id: 7, name: 'fotoPerfil', label: 'Foto Perfil (URL)', type: 'text', placeholder: 'https://...', validators: [] },
+    { id: 8, name: 'rolId', label: 'Rol (ID)', type: 'number', placeholder: '3', validators: [] }
   ];
 
   // paginación

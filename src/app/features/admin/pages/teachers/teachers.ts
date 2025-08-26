@@ -26,11 +26,9 @@ export class Teachers implements OnInit, OnDestroy {
     { id: 3, name: 'dni', label: 'DNI', type: 'text', placeholder: 'DNI', validators: [] },
     { id: 4, name: 'telefono', label: 'Teléfono', type: 'text', placeholder: 'Teléfono', validators: [] },
     { id: 5, name: 'email', label: 'Email', type: 'email', placeholder: 'correo@dominio.com', validators: [Validators.required, Validators.email] },
-    { id: 6, name: 'codigoProfesor', label: 'Código Profesor', type: 'text', placeholder: 'Código', validators: [] },
-    { id: 7, name: 'correoProfesional', label: 'Correo Profesional', type: 'email', placeholder: 'correo.institucional@dominio.com', validators: [Validators.email] },
-    { id: 8, name: 'biografia', label: 'Biografía', type: 'textarea', placeholder: 'Descripción breve', validators: [] },
-    { id: 9, name: 'fotoPerfil', label: 'Foto Perfil (URL)', type: 'text', placeholder: 'https://...', validators: [] },
-    { id: 10, name: 'rolId', label: 'Rol (ID)', type: 'number', placeholder: '2', validators: [] }
+    { id: 6, name: 'biografia', label: 'Biografía', type: 'textarea', placeholder: 'Descripción breve', validators: [] },
+    { id: 7, name: 'fotoPerfil', label: 'Foto Perfil (URL)', type: 'text', placeholder: 'https://...', validators: [] },
+    { id: 8, name: 'rolId', label: 'Rol (ID)', type: 'number', placeholder: '2', validators: [] }
   ];
 
   page = signal(1);

@@ -15,7 +15,7 @@
           </svg>
 
           <input #q type="search"
-                 placeholder="Buscar por nombre, apellido, DNI o código"
+                 placeholder="Buscar por nombre, apellido, país o código"
                  class="outline-none text-sm text-slate-700 w-64"
                  (input)="onSearch(q.value)"
                  [value]="searchTerm()" />
@@ -235,7 +235,6 @@
           <div><span class="font-medium">Teléfono:</span> {{ alumnoEnVista?.telefono }}</div>
           <div><span class="font-medium">Código:</span> {{ alumnoEnVista?.codigoAlumno }}</div>
           <div><span class="font-medium">País:</span> {{ alumnoEnVista?.pais }}</div>
-          <div><span class="font-medium">Correo Personal:</span> {{ alumnoEnVista?.correoPersonal }}</div>
           <div *ngIf="alumnoEnVista?.fotoPerfil">
             <span class="font-medium">Foto Perfil:</span>
             <div class="mt-2">
