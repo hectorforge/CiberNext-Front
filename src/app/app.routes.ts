@@ -18,6 +18,7 @@ import { RegisterStudents } from '@features/admin/pages/register-students/regist
 import { Teachers } from '@features/admin/pages/teachers/teachers';
 import { AreaSpecialization } from '@features/admin/pages/area-specialization/area-specialization';
 import { routesi } from '@features/profesor/profesor.router'; 
+import { ConsultaUsuario } from '@features/consulta/consulta-usuario/consulta-usuario';
 export const routes: Routes = [
 
   // Componentes para test
@@ -34,6 +35,7 @@ export const routes: Routes = [
       { path: '', component: Home, canActivate: [userGuardGuard],data: {roles : ['ALUMNO']}},
       {path: 'me', component: Perfil, canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
       { path: 'detail/course', component: DetailCourse,canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
+      {path: 'consultas', component:ConsultaUsuario, canActivate: [userGuardGuard], data: {roles : ['ALUMNO']} },
     ]
   },
 
@@ -74,7 +76,8 @@ export const routes: Routes = [
       component: TeacherLayout, 
       children:[
         {path: 'dashboard', component:DashboardTeacher,canActivate: [userGuardGuard], data: {roles : ['PROFESOR']} },
-        {path: 'profesores', children: routesi, canActivate: [userGuardGuard], data: { roles: ['PROFESOR'] } }
+        {path: 'profesores', children: routesi, canActivate: [userGuardGuard], data: { roles: ['PROFESOR'] } },
+        {path: 'consultas', component:ConsultaUsuario, canActivate: [userGuardGuard], data: {roles : ['PROFESOR']} },
       ]
     },
 

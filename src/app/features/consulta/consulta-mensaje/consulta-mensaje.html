@@ -1,0 +1,32 @@
+<div class="bg-white rounded-xl shadow p-4 mb-4 border border-indigo-100">
+
+    <div class="flex items-center gap-2 mb-2">
+        <span class="font-bold text-indigo-700">{{ consulta.nombreAutor }}</span>
+        <span class="text-xs text-gray-400">{{ consulta.fecha | date:'dd/MM/yy hh:mm a' }}</span>
+    </div>
+
+    <div *ngIf="consulta.titulo" class="text-lg font-semibold text-gray-800 mb-1">
+        {{ consulta.titulo }}
+    </div>
+
+    <div class="text-gray-700 mb-2">
+        {{ consulta.mensaje }}
+    </div>
+
+    <button (click)="mostrarResponder()" class="text-indigo-600 hover:underline" *ngIf="!mostrarFormulario">Responder</button>
+
+<div *ngIf="mostrarFormulario" class="mt-2">
+  <form (ngSubmit)="responder()" class="flex flex-col gap-2">
+    <textarea [(ngModel)]="nuevaRespuesta" name="respuesta" rows="2" class="border rounded p-2" placeholder="Escribe tu respuesta..."></textarea>
+    <div class="flex gap-2">
+      <button type="submit" class="bg-indigo-600 text-white px-4 py-1 rounded hover:bg-indigo-700">Enviar</button>
+      <button type="button" (click)="cancelarResponder()" class="bg-gray-300 text-gray-700 px-4 py-1 rounded hover:bg-gray-400">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+    <div *ngIf="consulta.respuestas && consulta.respuestas.length" class="ml-6 mt-2 border-l-2 border-indigo-200 pl-4">
+        <app-consulta-mensaje *ngFor="let respuesta of consulta.respuestas" [consulta]="respuesta" [idUsuario]="idUsuario" (consultaRegistrada)="consultaRegistrada.emit()">
+        </app-consulta-mensaje>
+    </div>
+</div>

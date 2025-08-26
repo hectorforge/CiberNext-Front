@@ -29,6 +29,12 @@
 
         @if (isLoggedIn()) {
 
+          <a routerLink="/home/consultas" class="relative hover:text-yellow-200 transition-colors duration-300 group">
+          Consultas
+          <span
+            class="absolute bottom-0 left-0 w-0 h-[2px] bg-yellow-200 transition-all duration-300 group-hover:w-full"></span>
+        </a>
+
           <!-- Menu usuario -->
           <div class="relative group">
             <button
@@ -78,7 +84,7 @@
          [class.max-h-96]="isMenuOpen">
       <div class="flex flex-col space-y-2 mt-3 pb-4 border-t border-white/20 pt-3 font-medium">
 
-        <a routerLink="/" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>
+        <a routerLink="/" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>        
 
         @if (isLoggedIn()) {
           <!-- Perfil arriba en mobile -->
@@ -88,7 +94,7 @@
             <span class="font-semibold">{{ getNombreCompleto() }}</span>
           </div>
 
-          <a routerLink="/home/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>
+          <a routerLink="/home/me" class="hover:text-yellow-200 transition-colors duration-300">Perfil</a>          
           <a routerLink="/auth/update-perfil" class="hover:text-yellow-200 transition-colors duration-300">Actualizar Cuenta</a>
           <a routerLink="/auth/change-password" class="hover:text-yellow-200 transition-colors duration-300">Cambiar contraseña</a>
           <button (click)="logout()"
