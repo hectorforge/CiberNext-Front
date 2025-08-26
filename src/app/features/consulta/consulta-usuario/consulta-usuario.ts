@@ -27,10 +27,10 @@ export class ConsultaUsuario implements OnInit {
     const token = this.authService['cookieService'].get('authToken');
     if (token) {
       const payload: any = jwtDecode(token);
-      this.idUsuario = payload.sub; // OBTENER DEL USUARIO LOGUEADO
-      this.usuarioRol = Array.isArray(payload.roles) ? payload.roles[0]?.nombre : null; // OBTENER DEL USUARIO LOGUEADO
-      this.idUsuario = 3; 
-      this.usuarioRol = 'PROFESOR';
+      this.idUsuario = payload.userId;
+      this.usuarioRol = Array.isArray(payload.roles) ? payload.roles[0]?.nombre : null; 
+      // this.idUsuario = 3; 
+      // this.usuarioRol = 'PROFESOR';
       console.log(this.idUsuario , ' - ', this.usuarioRol);
     }
 
