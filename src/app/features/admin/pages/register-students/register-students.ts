@@ -99,12 +99,20 @@ export class RegisterStudents {
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
 
+  // helpers
+  private normalizeProfesor(p: any) {
+    return {
+      id: Number(p?.id ?? p?.idProfesor ?? p?.profesorId ?? 0),
+      nombre: p?.nombre ?? p?.nombreProfesor ?? p?.nombreCompleto ?? '',
+      apellido: p?.apellido ?? p?.apellidoProfesor ?? ''
+    };
+  }
+
   constructor(public service: RegisterStudentsService) {
     if (typeof this.service.load === 'function') {
       try { this.service.load(); } catch {}
     }
 
-    // intentar cargar listas si el service expone métodos
     if (typeof this.service.listarCursos === 'function') {
       this.service.listarCursos().subscribe(c => this.cursos = c || []);
     }
@@ -112,7 +120,10 @@ export class RegisterStudents {
       this.service.listarAlumnos().subscribe(a => this.alumnos = a || []);
     }
     if (typeof this.service.listarProfesores === 'function') {
-      this.service.listarProfesores().subscribe(p => this.profesores = p || []);
+      this.service.listarProfesores().subscribe(p => {
+        const list = Array.isArray(p) ? p : [];
+        this.profesores = list.map(x => this.normalizeProfesor(x)).filter(x => x.id > 0);
+      });
     }
   }
 
@@ -123,7 +134,10 @@ export class RegisterStudents {
     if (id <= 0) return;
     if (typeof this.service.listarProfesoresPorCurso === 'function') {
       this.service.listarProfesoresPorCurso(id).subscribe({
-        next: list => this.profesores = Array.isArray(list) ? list : [],
+        next: list => {
+          const arr = Array.isArray(list) ? list : [];
+          this.profesores = arr.map(x => this.normalizeProfesor(x)).filter(x => x.id > 0);
+        },
         error: () => this.profesores = []
       });
     }
@@ -137,37 +151,48 @@ export class RegisterStudents {
   cancel() { this.showModal.set(false); }
 
   // Llamar desde la UI en lugar de service.save() para mostrar alertas en la vista
-  registrarEnVista(payload: RegistroAlumnoRequestDto) {
+  registrarEnVista(payload?: RegistroAlumnoRequestDto) {
     this.errorMessage.set(null);
     this.successMessage.set(null);
 
-    this.service.registerAlumno(payload).subscribe({
+    const p = payload ?? this.nuevoRegistro;
+    const cursoId = Number(p?.cursoId) || 0;
+    const alumnoId = Number(p?.alumnoId) || 0;
+    const profesorId = Number(p?.profesorId) || 0;
+
+    if (cursoId <= 0) { this.errorMessage.set('Seleccione un curso válido.'); return; }
+    if (alumnoId <= 0) { this.errorMessage.set('Seleccione un alumno válido.'); return; }
+    if (profesorId <= 0) { this.errorMessage.set('Seleccione un profesor válido.'); return; }
+
+    const body: RegistroAlumnoRequestDto = { cursoId, alumnoId, profesorId };
+
+    this.service.registerAlumno(body).subscribe({
       next: resp => {
         const status = resp?.status ?? 0;
         if (status >= 200 && status < 300) {
           this.successMessage.set('Alumno registrado correctamente.');
-          this.service.load();
+          this.service.load?.();
+          this.showModal.set(false);
+          this.nuevoRegistro = { cursoId: 0, alumnoId: 0, profesorId: 0 };
         } else {
           this.errorMessage.set('Error al registrar el alumno. Código: ' + status);
         }
       },
       error: err => {
-        const status = err?.status ?? 0;
-        const serverMsg = err?.error?.message || err?.error?.mensaje || null;
-        if (status === 409 || status === 400) {
-          this.errorMessage.set(serverMsg || 'El profesor no está asignado para dictar este curso.');
+        const serverMsg = err?.error?.message || err?.error?.mensaje
+          || (typeof err?.error === 'string' ? err.error : null)
+          || (err?.message ? err.message : null);
+        if (serverMsg) {
+          this.errorMessage.set(String(serverMsg));
         } else {
-          this.errorMessage.set('Error al registrar el alumno. Código: ' + status + (serverMsg ? ' — ' + serverMsg : ''));
+          this.errorMessage.set('Error interno del servidor');
         }
       }
     });
   }
 
-  // Wrapper para compatibilidad con la plantilla
-  save(payload?: RegistroAlumnoRequestDto) {
-    const p = payload ?? this.nuevoRegistro;
-    this.registrarEnVista(p);
-    this.showModal.set(false);
+  save(payload?: any) {
+    this.registrarEnVista(payload ?? this.nuevoRegistro);
   }
   
   // eliminar

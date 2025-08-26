@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@envs/environment.development';
 import { Observable } from 'rxjs';
+import { environment } from '@envs/environment.development';
 
 export interface RegistroAlumnoRequestDto {
   cursoId: number;
@@ -21,7 +21,7 @@ export class RegisterStudentsService {
   registros = signal<RegistroAlumnoResponseDto[]>([]);
   selected = signal<RegistroAlumnoRequestDto | null>(null);
 
-  private api = `${environment.apiURLBase}/registro-alumno`;
+  private readonly api = environment.apiURLRegistroAlumno;
 
   constructor(private http: HttpClient) {}
 
@@ -56,7 +56,6 @@ export class RegisterStudentsService {
     });
   }
 
-  // Nuevo: registrar pero devolver la respuesta para que el componente la maneje (sin hacer alert())
   registerAlumno(payload: RegistroAlumnoRequestDto) {
     return this.http.post<RegistroAlumnoResponseDto>(this.api, payload, { observe: 'response' as const });
   }
