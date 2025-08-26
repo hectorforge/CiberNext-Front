@@ -1,8 +1,10 @@
 <header class="bg-[#002855] text-white p-4 flex items-center justify-between">
   <div class="flex items-center">
     <a routerLink="/" class="text-white text-xl font-bold">Cibernext</a>
-    <h1 class="ml-4 text-xl">{{ curso.nombre }}</h1>
+    <h1 class="ml-4 text-xl">{{ curso?.cursoNombre }}</h1>
   </div>
+
+  
   <div class="flex items-center space-x-4">
     <button class="flex items-center space-x-2">
       <span class="text-sm">Tu progreso</span>
@@ -11,24 +13,23 @@
     <button class="bg-white text-[#002855] px-4 py-2 rounded font-semibold">
       Compartir
     </button>
-    <div class="relative">
-      <button class="p-2 rounded-full hover:bg-gray-700">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-        </svg>
-      </button>
-    </div>
   </div>
+
 </header>
 
-<main class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
+<main class="flex flex-col lg:flex-row min-h-screen bg-gray-100" *ngIf="!loading && !error">
   <!-- VIDEO -->
   <div class="flex-1 p-8">
-    <div class="bg-black rounded-lg overflow-hidden mb-6 h-[28rem]">
-      <iframe class="w-full h-full" [src]="videoUrl" title="Video del curso"
-              frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; 
-              gyroscope; picture-in-picture; web-share" allowfullscreen>
-      </iframe>
+    <div class="bg-black rounded-lg overflow-hidden mb-6 h-[28rem] flex items-center justify-center text-white">
+      <ng-container *ngIf="videoUrl; else noVideo">
+        <video controls autoplay class="w-full h-full object-cover">
+          <source [src]="videoUrl" type="video/mp4" />
+          Tu navegador no soporta la reproducción de video.
+        </video>
+      </ng-container>
+      <ng-template #noVideo>
+        <p class="text-gray-400">Selecciona un video para reproducir</p>
+      </ng-template>
     </div>
 
     <!-- Tabs -->
@@ -55,20 +56,19 @@
       <h3 class="text-xl font-bold">Contenido del curso</h3>
     </div>
     <div class="space-y-2">
-      <details *ngFor="let seccion of secciones" class="group" [attr.open]="seccion.abierta ? '' : null">
+      <details *ngFor="let unidad of curso?.unidades" class="group">
         <summary class="flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 cursor-pointer rounded-lg">
-          <span class="font-semibold text-gray-800">{{ seccion.titulo }}</span>
+          <span class="font-semibold text-gray-800">{{ unidad.unidadNombre }}</span>
           <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </summary>
         <div class="p-4 bg-white border-l-2 border-gray-200">
           <ul class="space-y-2">
-            <li *ngFor="let clase of seccion.clases" class="flex items-center text-gray-600">
-              <svg class="w-5 h-5 text-purple-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-              </svg>
-              <span>{{ clase.titulo }} - {{ clase.duracion }}</span>
+            <li *ngFor="let doc of unidad.documentos" class="flex items-center text-gray-600 cursor-pointer hover:text-blue-600"
+                (click)="doc.tipoDocumentoExtension === 'mp4' ? playVideo(doc.documentoArchivo) : null">
+              <span class="mr-2">{{ getIcon(doc.tipoDocumentoExtension) }}</span>
+              <span>{{ doc.documentoNombre }}</span>
             </li>
           </ul>
         </div>
@@ -76,3 +76,10 @@
     </div>
   </div>
 </main>
+
+<div *ngIf="loading" class="flex items-center justify-center min-h-screen text-gray-500">
+  Cargando curso...
+</div>
+<div *ngIf="error" class="flex items-center justify-center min-h-screen text-red-500">
+  {{ error }}
+</div>

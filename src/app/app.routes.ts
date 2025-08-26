@@ -34,7 +34,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: Home, canActivate: [userGuardGuard],data: {roles : ['ALUMNO']}},
       {path: 'me', component: Perfil, canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
-      { path: 'detail/course', component: DetailCourse,canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
+      { path: 'detail/course/:id', component: DetailCourse,canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
       {path: 'consultas', component:ConsultaUsuario, canActivate: [userGuardGuard], data: {roles : ['ALUMNO']} },
     ]
   },
