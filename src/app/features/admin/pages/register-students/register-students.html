@@ -128,7 +128,7 @@
           <!-- Combo cursos -->
           <div>
             <label class="block text-sm font-medium text-slate-700">Curso</label>
-            <select [(ngModel)]="nuevoRegistro.cursoId" class="mt-1 block w-full border rounded p-2">
+            <select [(ngModel)]="nuevoRegistro.cursoId" (ngModelChange)="onCursoChange($event)" class="mt-1 block w-full border rounded p-2">
               <option value="0" disabled>Seleccione un curso</option>
               <option *ngFor="let c of cursos" [value]="c.id">{{ c.nombre }}</option>
             </select>

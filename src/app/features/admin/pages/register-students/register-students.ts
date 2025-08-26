@@ -116,6 +116,19 @@ export class RegisterStudents {
     }
   }
 
+  onCursoChange(cursoId: number) {
+    const id = Number(cursoId) || 0;
+    this.profesores = [];
+    this.nuevoRegistro.profesorId = 0;
+    if (id <= 0) return;
+    if (typeof this.service.listarProfesoresPorCurso === 'function') {
+      this.service.listarProfesoresPorCurso(id).subscribe({
+        next: list => this.profesores = Array.isArray(list) ? list : [],
+        error: () => this.profesores = []
+      });
+    }
+  }
+
   // modal nuevo
   openNew() {
     this.nuevoRegistro = { cursoId: 0, alumnoId: 0, profesorId: 0 };

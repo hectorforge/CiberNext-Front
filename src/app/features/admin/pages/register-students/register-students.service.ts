@@ -75,4 +75,8 @@ export class RegisterStudentsService {
   listarProfesores(): Observable<any[]> {
     return this.http.get<any[]>(environment.apiURLProfesores);
   }
+  listarProfesoresPorCurso(cursoId: number): Observable<any[]> {
+    const url = `${environment.apiURLCursos}/${cursoId}/profesores`;
+    return this.http.get<any[]>(url);
+  }
 }
