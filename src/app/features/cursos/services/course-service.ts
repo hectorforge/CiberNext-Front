@@ -1,24 +1,40 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@envs/environment.development';
 import { Observable } from 'rxjs';
 import { Course } from '../models/Course';
 import { Document } from '../models/Document';
 import { UnidadAprendizaje } from '../models/UnidadAprendizaje';
+import { CourseDetail } from '../models/CourseDetail';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
+
+  private readonly http = inject(HttpClient);
+
   private apiUrlCursos = environment.apiURLCursos;
   private apiUrlDocs = environment.apiURLDocumentos;
   private apiUrlUnidades = environment.apiURLUnidades;
+  //private apiUrlCursos = 'http://localhost:8080/api/alumnos/9/cursos';
 
-  constructor(private http: HttpClient) {}
+  private apiUrlCursoPorIdEstudiante = 'http://localhost:8080/api/alumnos//cursos-documentos';
+
+
+  // ==================== dash cursos ===============
+
+  getCursoPorIdEstudiante(id : number): Observable<Course[]> {
+    return this.http.get<Course[]>(`http://localhost:8080/api/alumnos/${id}/cursos-documentos`);
+  }
 
   // ===================== CURSOS =====================
   getById(id: number): Observable<Course> {
     return this.http.get<Course>(`${this.apiUrlCursos}/${id}`);
+  }
+
+  getDetail(id: number): Observable<CourseDetail> {
+    return this.http.get<CourseDetail>(`${this.apiUrlCursos}/${id}/detalle`);
   }
 
   getAll(): Observable<Course[]> {

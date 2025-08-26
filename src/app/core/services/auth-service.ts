@@ -68,4 +68,42 @@ export class AuthService {
       return [];
     }
   }
+
+  // Tokens utils
+
+    /** Retorna el token almacenado en cookies */
+    getToken(): string | null {
+      if (!this.cookieService.check('authToken')) {
+        return null;
+      }
+      return this.cookieService.get('authToken');
+    }
+  
+    /** Decodifica el token y retorna el payload */
+    decodeToken(): JwtPayload | null {
+      const token = this.getToken();
+      if (!token) return null;
+  
+      try {
+        return jwtDecode<JwtPayload>(token);
+      } catch (error) {
+        console.error('Error decodificando token:', error);
+        return null;
+      }
+    }
+  
+    /** Devuelve el rol principal del usuario */
+    getUserRole(): string | null {
+      const decoded = this.decodeToken();
+      return decoded?.roles[0]?.nombre ?? null;
+    }
+  
+    /** Devuelve si el token expiró */
+    isTokenExpired(): boolean {
+      const decoded = this.decodeToken();
+      if (!decoded) return true;
+  
+      const now = Math.floor(Date.now() / 1000);
+      return decoded.exp < now;
+    }
 }
