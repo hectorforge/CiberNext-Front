@@ -7,10 +7,29 @@
         <h1 class="text-4xl font-semibold text-slate-900">Registro de Alumnos</h1>
         <p class="mt-1 text-base text-slate-500">Gestión de inscripciones de alumnos a cursos</p>
       </div>
-      <button (click)="openNew()"
-              class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
-        Nuevo Registro
-      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center bg-white border border-slate-200 rounded-md px-3 py-2 shadow-sm">
+          <svg class="h-5 w-5 text-slate-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+
+          <input #q type="search"
+                 placeholder="Buscar registros por alumno, curso o código"
+                 class="outline-none text-sm text-slate-700 w-64"
+                 (input)="onSearch(q.value)"
+                 [value]="searchTerm()" />
+
+          <button *ngIf="searchTerm()" (click)="onSearch('')" class="ml-3 px-3 py-1 text-sm text-slate-500 hover:text-slate-700 rounded">
+            Limpiar
+          </button>
+        </div>
+
+        <button (click)="openNew()"
+                class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
+          Nuevo Registro
+        </button>
+      </div>
     </div>
 
     <!-- Tabla -->

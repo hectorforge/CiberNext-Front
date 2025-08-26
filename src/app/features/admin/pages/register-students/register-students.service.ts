@@ -32,10 +32,16 @@ export class RegisterStudentsService {
     });
   }
 
+  // Buscar registros en backend: GET /api/registro-alumno/buscar?filtro=...
+  buscar(filtro: string) {
+    const url = `${this.api}/buscar?filtro=${encodeURIComponent(filtro)}`;
+    return this.http.get<RegistroAlumnoResponseDto[]>(url);
+  }
+  
   save(payload: RegistroAlumnoRequestDto) {
     this.http.post<RegistroAlumnoResponseDto>(this.api, payload).subscribe(() => this.load());
   }
-
+  
   delete(id: number) {
     this.http.delete(`${this.api}/${id}`).subscribe(() => this.load());
   }

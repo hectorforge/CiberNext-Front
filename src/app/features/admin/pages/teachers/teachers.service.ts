@@ -59,4 +59,10 @@ export class TeachersService {
   listarConsultasNoRespondidasProfesor(idProfesor: number) {
     return this.http.get<any[]>(`${this.api}/${idProfesor}/no-respondidas`);
   }
+
+  // Buscar profesores en backend: GET /api/profesores/buscar?filtro=...
+  buscar(filtro: string) {
+    const url = `${this.api}/buscar?filtro=${encodeURIComponent(filtro)}`;
+    return this.http.get<ProfesorDto[]>(url);
+  }
 }

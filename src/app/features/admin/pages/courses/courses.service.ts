@@ -6,6 +6,7 @@ import { environment } from '@envs/environment.development';
 
 export interface CursoDto { id?: number; codigo?: string; nombre?: string; descripcion?: string; }
 export interface ProfesorDto {
+  id?: number; // <-- agregado para seguridad
   idProfesor?: number;
   codigoProfesor?: string;
   nombre?: string;
@@ -49,7 +50,7 @@ export class CoursesService {
   cursos = signal<CursoDto[]>([]);
   selected = signal<CursoDto | null>(null);
 
-  private api = environment.apiURLCursos; // '/api/cursos' o full URL
+  private api = environment.apiURLCursos; 
 
   constructor(private http: HttpClient) {}
 
@@ -82,12 +83,27 @@ export class CoursesService {
     return this.http.get<DocumentoDto[]>(`${this.api}/${idCurso}/documentos`);
   }
 
-  // Registrar documento (POST /api/cursos/registrar-documento)
+  listarProfesoresDisponibles(): Observable<ProfesorDto[]> {
+    return this.http.get<ProfesorDto[]>(`${environment.apiURLProfesores}`);
+  }
+
+  buscarProfesores(filtro: string): Observable<ProfesorDto[]> {
+    const url = `${environment.apiURLProfesores}/buscar?filtro=${encodeURIComponent(filtro)}`;
+    return this.http.get<ProfesorDto[]>(url);
+  }
+
+  asignarProfesor(cursoId: number, profesorId: number) {
+    return this.http.post(`${this.api}/${cursoId}/asignar-profesor/${profesorId}`, {});
+  }
+
+  asignarProfesorDto(payload: { cursoId: number; profesorId: number; }) {
+    return this.http.post(`${this.api}/asignar-profesor`, payload);
+  }
+  
   registrarDocumento(doc: DocumentoDto): Observable<DocumentoDto> {
     return this.http.post<DocumentoDto>(`${this.api}/registrar-documento`, doc);
   }
 
-  // Eliminar documento (DELETE /api/cursos/{id}/eliminar-documento)
   eliminarDocumento(idDocumento: number): Observable<any> {
     return this.http.delete(`${this.api}/${idDocumento}/eliminar-documento`);
   }

@@ -16,10 +16,21 @@ export class RegisterStudents {
   // paginación
   page = signal(1);
   pageSize = signal(8);
-  totalItems = computed(() => (this.service.registros ? this.service.registros().length : 0));
+
+  // búsqueda
+  searchTerm = signal('');
+  private searchTimer: any = null;
+  private readonly SEARCH_DEBOUNCE = 300;
+  private filtered = signal<RegistroAlumnoResponseDto[] | null>(null);
+
+  // ahora consideran el filtro cuando exista
+  totalItems = computed(() => {
+    const f = this.filtered();
+    return f ? f.length : (this.service.registros ? this.service.registros().length : 0);
+  });
   totalPages = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.pageSize())));
   pagedRegistros = computed(() => {
-    const all = (this.service.registros ? this.service.registros() : []);
+    const all = this.filtered() ?? (this.service.registros ? this.service.registros() : []);
     const p = this.page();
     const size = this.pageSize();
     return all.slice((p - 1) * size, (p - 1) * size + size);
@@ -35,11 +46,46 @@ export class RegisterStudents {
     return Math.min(this.page() * this.pageSize(), this.totalItems());
   }
 
+  // BÚSQUEDA: debounce + llamada al backend
+  onSearch(term: string) {
+    const q = (term || '').trim();
+    this.searchTerm.set(q);
+
+    if (this.searchTimer) clearTimeout(this.searchTimer);
+    this.searchTimer = setTimeout(() => {
+      if (!q) {
+        this.filtered.set(null);
+        // recargar lista completa
+        if (typeof this.service.load === 'function') { try { this.service.load(); } catch {} }
+        this.goTo(1);
+        return;
+      }
+
+      // llamar al backend
+      if (typeof this.service.buscar === 'function') {
+        this.service.buscar(q).subscribe({
+          next: list => {
+            this.filtered.set(Array.isArray(list) ? list : []);
+            this.goTo(1);
+          },
+          error: err => {
+            console.error('Error buscando registros:', err);
+            this.filtered.set([]);
+            this.goTo(1);
+          }
+        });
+      } else {
+        // si no existe el método, limpiar filtro
+        this.filtered.set(null);
+      }
+    }, this.SEARCH_DEBOUNCE);
+  }
+  
   // modales / estados
   showModal = signal(false);
   showDeleteConfirm = signal(false);
   showDetail = signal(false);
-
+  
   registroParaEliminar = signal<RegistroAlumnoResponseDto | null>(null);
   registroEnVista = signal<RegistroAlumnoResponseDto | null>(null);
 

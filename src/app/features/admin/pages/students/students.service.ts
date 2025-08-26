@@ -64,4 +64,10 @@ export class StudentsService {
   listarCursosPorAlumno(idAlumno: number) {
     return this.http.get<any[]>(`${this.api}/${idAlumno}/cursos`);
   }
+
+  // Buscar alumnos en backend: GET /api/alumnos/buscar?filtro=...
+  buscar(filtro: string) {
+    const url = `${this.api}/buscar?filtro=${encodeURIComponent(filtro)}`;
+    return this.http.get<AlumnoDto[]>(url);
+  }
 }

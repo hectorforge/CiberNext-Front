@@ -34,10 +34,21 @@ export class Students {
   // paginación
   page = signal(1);
   pageSize = signal(6);
-  totalItems = computed(() => this.studentsService.alumnos().length);
+
+  // BÚSQUEDA: señal y filtro (filtrado local sobre la lista cargada)
+  searchTerm = signal('');
+  private searchTimer: any = null;
+  private readonly SEARCH_DEBOUNCE = 250; // ms
+  private filtered = signal<AlumnoDto[] | null>(null);
+
+  // totalItems y pagedAlumnos ahora consideran el filtro cuando existe
+  totalItems = computed(() => {
+    const f = this.filtered();
+    return f ? f.length : this.studentsService.alumnos().length;
+  });
   totalPages = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.pageSize())));
   pagedAlumnos = computed(() => {
-    const all = this.studentsService.alumnos();
+    const all = this.filtered() ?? this.studentsService.alumnos();
     const p = this.page();
     const size = this.pageSize();
     return all.slice((p - 1) * size, (p - 1) * size + size);
@@ -59,7 +70,7 @@ export class Students {
 
   constructor(public studentsService: StudentsService) {
     try { this.studentsService.load(); } catch {}
-    effect(() => console.log('Alumnos total:', this.studentsService.alumnos().length));
+    effect(() => console.log('Alumnos total:', this.studentsService.alumnos().length, 'filtro:', this.filtered()?.length ?? 'n/a'));
   }
 
   get selectedAlumnoValue(): AlumnoDto | null {
@@ -102,16 +113,6 @@ export class Students {
     this.cancel();
   }
 
-  saveClick() {
-    try {
-      const el = this.dynFormRef?.nativeElement as HTMLElement | undefined;
-      const btn = el?.querySelector('button[type="submit"]') as HTMLElement | null;
-      if (btn) { btn.click(); return; }
-      const cmp: any = (this.dynFormRef as any)?.nativeElement;
-      if (cmp && typeof cmp.submit === 'function') { cmp.submit(); }
-    } catch (e) { console.warn('saveClick error', e); }
-  }
-
   openCursos(a: AlumnoDto) {
     if (!a?.id) return;
     this.cursos.set([]); this.showCursos.set(true); this.alumnoEnVista = a;
@@ -147,6 +148,33 @@ export class Students {
   prev() { this.goTo(this.page() - 1); }
   next() { this.goTo(this.page() + 1); }
   setPageSize(size: number) { this.pageSize.set(Number(size)); this.goTo(1); }
+
+  onSearch(term: string) {
+    const texto = (term || '').trim();
+    this.searchTerm.set(texto);
+
+    if (this.searchTimer) clearTimeout(this.searchTimer);
+    this.searchTimer = setTimeout(() => {
+      if (!texto) {
+        this.filtered.set(null);
+        this.studentsService.load();
+        this.goTo(1);
+        return;
+      }
+
+      this.studentsService.buscar(texto).subscribe({
+        next: (list) => {
+          this.filtered.set(Array.isArray(list) ? list : []);
+          this.goTo(1);
+        },
+        error: (err) => {
+          console.error('Error buscando alumnos:', err);
+          this.filtered.set([]);
+          this.goTo(1);
+        }
+      });
+    }, this.SEARCH_DEBOUNCE);
+  }
 }
 
 export const routes: Routes = [

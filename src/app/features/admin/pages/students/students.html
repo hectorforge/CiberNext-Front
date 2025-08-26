@@ -7,10 +7,29 @@
         <h1 class="text-4xl font-semibold text-slate-900">Alumnos</h1>
         <p class="mt-1 text-base text-slate-500">Gestión y detalle de alumnos</p>
       </div>
-      <button (click)="openNew()"
-              class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
-        Nuevo Alumno
-      </button>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center bg-white border border-slate-200 rounded-md px-3 py-2 shadow-sm">
+          <svg class="h-5 w-5 text-slate-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+
+          <input #q type="search"
+                 placeholder="Buscar por nombre, apellido, DNI o código"
+                 class="outline-none text-sm text-slate-700 w-64"
+                 (input)="onSearch(q.value)"
+                 [value]="searchTerm()" />
+
+          <button *ngIf="searchTerm()" (click)="onSearch('')" class="ml-3 px-3 py-1 text-sm text-slate-500 hover:text-slate-700 rounded">
+            Limpiar
+          </button>
+        </div>
+
+        <button (click)="openNew()"
+                class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
+          Nuevo Alumno
+        </button>
+      </div>
     </div>
 
     <!-- Tabla -->
@@ -145,50 +164,20 @@
           </div>
           <button (click)="cancel()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
         </div>
-
-        <div class="p-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Formulario (ocupa 2/3) -->
-            <div class="md:col-span-2">
-              <div class="bg-slate-50 border border-slate-100 rounded-lg p-4">
-                <!-- Inline styles removed: usar clase .grid-form en el componente dinámico -->
-                <app-dynamic-form
-                  class="grid-form"
-                  #dynFormRef
-                  [fields]="fields"
-                  [initialData]="selectedAlumnoValue"
-                  submitLabel="Guardar"
-                  (formSubmit)="save($event)">
-                </app-dynamic-form>
-              </div>
-            </div>
-
-            <!-- Panel derecho compacto -->
-            <aside class="md:col-span-1 flex flex-col gap-4">
-              <div class="border rounded-lg p-4 bg-white shadow-sm flex items-center gap-4">
-                <div class="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 text-lg font-medium">
-                  {{ (selectedAlumnoValue.nombre || '').charAt(0) }}{{ (selectedAlumnoValue.apellido || '').charAt(0) }}
-                </div>
-                <div class="min-w-0">
-                  <div class="font-medium text-slate-800 truncate">{{ selectedAlumnoValue.nombre }} {{ selectedAlumnoValue.apellido }}</div>
-                  <div class="text-xs text-slate-500 truncate">{{ selectedAlumnoValue.codigoAlumno || selectedAlumnoValue.dni || '' }}</div>
-                </div>
-              </div>
-
-              <div class="border rounded-lg p-4 bg-white shadow-sm mt-auto">
-                <div class="flex flex-col gap-3">
-                  <button type="button"
-                          class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-md text-sm font-medium"
-                          (click)="saveClick()">
-                    Guardar
-                  </button>
-                </div>
-              </div>
-
-              <div class="text-xs text-slate-500">Tip: completa los campos obligatorios antes de guardar.</div>
-            </aside>
+            <div class="p-6">
+        <div class="w-full">
+          <div class="bg-slate-50 border border-slate-100 rounded-lg p-4">
+            <app-dynamic-form
+              class="grid-form w-full"
+              #dynFormRef
+              [fields]="fields"
+              [initialData]="selectedAlumnoValue"
+              submitLabel="Guardar"
+              (formSubmit)="save($event)">
+            </app-dynamic-form>
           </div>
         </div>
+      </div>
       </div>
     </div>
 

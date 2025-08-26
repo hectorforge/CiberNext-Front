@@ -15,20 +15,21 @@ import { DynamicFormComponent } from '@shared/components/DynamicForm/dynamicForm
 export class Courses {
   public Math = Math;
 
-  // campos para el DynamicForm (no elimines, solo agrega/ajusta si hace falta)
   fields: DynamicField[] = [
     { id: 1, name: 'codigo', label: 'Código', type: 'text', placeholder: 'Código', validators: [Validators.required] },
     { id: 2, name: 'nombre', label: 'Nombre', type: 'text', placeholder: 'Nombre', validators: [Validators.required] },
     { id: 3, name: 'descripcion', label: 'Descripción', type: 'textarea', placeholder: 'Descripción', validators: [] }
   ];
 
-  // paginación (client-side)
   page = signal(1);
   pageSize = signal(6);
-  totalItems = computed(() => this.coursesService.cursos().length);
+  totalItems = computed(() => {
+    const f = this.filtered();
+    return f ? f.length : this.coursesService.cursos().length;
+  });
   totalPages = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.pageSize())));
   pagedCourses = computed(() => {
-    const all = this.coursesService.cursos();
+    const all = this.filtered() ?? this.coursesService.cursos();
     const p = this.page();
     const size = this.pageSize();
     return all.slice((p - 1) * size, (p - 1) * size + size);
@@ -39,33 +40,37 @@ export class Courses {
   showProfesores = signal(false);
   cursoEnVista: CursoDto | null = null;
 
-  // modal alumnos (nuevo)
+
   alumnos = signal<AlumnoDto[]>([]);
   showAlumnos = signal(false);
   cursoEnVistaAlumnos: CursoDto | null = null;
-
-  // modal documentos
   documentos = signal<DocumentoDto[]>([]);
   showDocumentos = signal(false);
   cursoEnVistaDocumentos: CursoDto | null = null;
 
-  // búsqueda
   searchTerm = signal('');
   private searchTimer: any = null;
   private SEARCH_DEBOUNCE = 300; // ms
 
-  // NUEVO: confirmación de borrado (modal)
+  private filtered = signal<CursoDto[] | null>(null);
+
   showDeleteConfirm = signal(false);
   cursoParaEliminar = signal<CursoDto | null>(null);
   deleting = signal(false);
 
-  // --- Añadido: soporte edición de documentos y combos ---
+
   editingDocumento: any = null;
   tiposDocumento: any[] = [];
   unidades: any[] = [];
 
-  // --- Nuevo: creación de documento ---
   isNewDocumento = false;
+
+  // ASIGNAR modal state
+  showAssignModal = signal(false);
+  availableProfesores = signal<any[]>([]);
+  assignSelectedProfessor: number | null = null;
+  assignSearchTerm = '';
+  cursoEnVistaAssign: any | null = null;
 
   constructor(public coursesService: CoursesService) {
     this.coursesService.load();
@@ -168,17 +173,12 @@ export class Courses {
         }
         this.unidades = Array.from(mapU.values());
 
-        // logs de depuración (temporal)
-        // eslint-disable-next-line no-console
         console.log('openDocumentos -> unidades reconstruidas:', this.unidades);
-
-        // reconstruir tipos también (si lo necesitas)...
         {
           const map = new Map<number | string, { id: any; nombre: string }>();
           for (const d of docs) {
             if (!d) continue;
 
-            // preferir campos planos en tu DTO
             if ((d as any).idTipoDocumento != null) {
               const id = (d as any).idTipoDocumento;
               const nombre =
@@ -200,9 +200,6 @@ export class Courses {
           }
           this.tiposDocumento = Array.from(map.values());
         }
-
-        // logs temporales para depuración (quítalos cuando confirme que funciona)
-        // eslint-disable-next-line no-console
         console.log('openDocumentos: docs.length=', docs.length, 'tiposDocumento=', this.tiposDocumento, 'unidades=', this.unidades);
       },
       error: err => {
@@ -220,9 +217,6 @@ export class Courses {
     this.cursoEnVistaDocumentos = null;
   }
 
-
-
-  // iniciar edición (clona para no mutar la lista directamente)
   startEditarDocumento(d: any) {
     if (!d) return;
     this.editingDocumento = { ...d };
@@ -248,9 +242,6 @@ export class Courses {
     else if (this.editingDocumento.unidad && this.editingDocumento.unidad.id != null) unidadId = this.editingDocumento.unidad.id;
 
     this.editingDocumento.idUnidadAprendizaje = unidadId != null ? Number(unidadId) : null;
-
-    // log temporal para depurar si no se selecciona la unidad
-    // eslint-disable-next-line no-console
     console.log('startEditarDocumento: editingDocumento.idUnidadAprendizaje=', this.editingDocumento.idUnidadAprendizaje, 'unidades=', this.unidades);
   }
 
@@ -267,7 +258,6 @@ export class Courses {
       cursoId: this.cursoEnVistaDocumentos?.id ?? undefined
     };
     this.isNewDocumento = true;
-    // abrir modal si no está abierto
     try { this.showDocumentos.set(true); } catch (e) { /* noop */ }
   }
 
@@ -285,9 +275,6 @@ export class Courses {
       idUnidadAprendizaje: this.editingDocumento.idUnidadAprendizaje != null ? Number(this.editingDocumento.idUnidadAprendizaje) : undefined,
       cursoId: this.cursoEnVistaDocumentos?.id
     };
-
-    // debug rapido (quita si no hace falta)
-    // console.log('guardarDocumento -> payload:', payload, 'isNew=', this.isNewDocumento);
 
     // Si es NUEVO -> intentar crear (POST)
     if (this.isNewDocumento) {
@@ -317,7 +304,6 @@ export class Courses {
           console.error('guardarDocumento (crear) fallo llamando service', e);
         }
       }
-      // fallback local si no hay método en service
       try {
         const arr = this.documentos();
         arr.push(payload);
@@ -328,8 +314,6 @@ export class Courses {
       return;
     }
 
-    // Si no es nuevo -> actualizar (UPDATE)
-    // Intentar métodos conocidos del service (varias firmas)
     try {
       if (svc && typeof svc.actualizarDocumento === 'function') {
         if (payload.id != null) {
@@ -360,7 +344,6 @@ export class Courses {
       console.error('guardarDocumento: error llamando service', e);
     }
 
-    // fallback local si no se llamó al servicio
     try {
       const arr = this.documentos();
       const idx = arr.findIndex(x => x.id === payload.id);
@@ -373,7 +356,6 @@ export class Courses {
   }
 
   private postGuardarReload() {
-    // recargar desde API y limpiar edición/flags
     if (this.cursoEnVistaDocumentos?.id && typeof this.coursesService.listarDocumentosPorCurso === 'function') {
       this.coursesService.listarDocumentosPorCurso(this.cursoEnVistaDocumentos.id).subscribe({
         next: list => { this.documentos.set(list || []); this.editingDocumento = null; this.isNewDocumento = false; },
@@ -397,11 +379,22 @@ export class Courses {
     this.searchTimer = setTimeout(() => {
       const q = (filtro || '').trim();
       if (!q) {
-        // vacío => volver al listado completo
+        this.filtered.set(null);
         this.coursesService.load();
+        return;
       } else {
-        // llamar al endpoint de búsqueda
-        this.coursesService.buscarCursos(q);
+        try { if (typeof this.coursesService.buscarCursos === 'function') this.coursesService.buscarCursos(q); } catch (e) { /* noop */ }
+
+        const low = q.toLowerCase();
+        try {
+          const list = this.coursesService.cursos().filter(c =>
+            ((c.codigo || '') + ' ' + (c.nombre || '')).toLowerCase().includes(low)
+          );
+          this.filtered.set(list);
+          this.page.set(1);
+        } catch (e) {
+          this.filtered.set(null);
+        }
       }
     }, this.SEARCH_DEBOUNCE);
   }
@@ -433,34 +426,26 @@ export class Courses {
     const selected = this.coursesService.selected();
     const dto: CursoDto = { ...(selected || {}), ...payload };
 
-    // Cerrar modal de formulario inmediatamente para regresar al listado
     this.cancel();
 
-    // Intentar usar el retorno del service si devuelve Observable
     try {
       const result: any = this.coursesService.save(dto);
       if (result && typeof result.subscribe === 'function') {
         result.subscribe({
           next: () => {
-            // recargar listado cuando la petición termine
             this.coursesService.load();
           },
           error: (err: any) => {
             console.error('Error al guardar curso:', err);
-            // recargar igualmente para mantener consistencia
             this.coursesService.load();
           }
         });
         return;
       }
     } catch (e) {
-      // si ocurre error al intentar usar el retorno, lo ignoramos y seguimos
-      // eslint-disable-next-line no-console
       console.warn('save: no se pudo suscribir al resultado de save()', e);
     }
 
-    // Si el service hace el subscribe internamente o no retorna Observable,
-    // forzamos una recarga del listado (fallback)
     this.coursesService.load();
   }
 
@@ -496,19 +481,80 @@ export class Courses {
     try {
       await this.coursesService.delete(c.id);
     } catch (err) {
-      // noop - tu service ya maneja errores. puedes mostrar toast aquí.
-      // console.error('Eliminar error', err);
     } finally {
       this.deleting.set(false);
       this.cancelDelete();
     }
   }
 
-  // cancelar edición o creación
   cancelEditarDocumento() {
-    // cancelar edición o creación
     this.editingDocumento = null;
     this.isNewDocumento = false;
+  }
+
+  openAssignModal(c: any) {
+    if (!c?.id) return;
+    this.cursoEnVistaAssign = c;
+    this.assignSelectedProfessor = null;
+    this.assignSearchTerm = '';
+    this.availableProfesores.set([]);
+    this.showAssignModal.set(true);
+
+    this.coursesService.listarProfesoresDisponibles().subscribe({
+      next: list => {
+        console.log('Profesores disponibles ->', list);
+        this.availableProfesores.set(Array.isArray(list) ? list : []);
+      },
+      error: err => {
+        console.error('Error listarProfesoresDisponibles:', err);
+        this.availableProfesores.set([]);
+      }
+    });
+  }
+
+  searchAssignProfesor(term: string) {
+    const q = (term || '').trim();
+    this.assignSearchTerm = q;
+    if (!q) { this.availableProfesores.set([]); return; }
+    this.coursesService.buscarProfesores(q).subscribe({
+      next: list => this.availableProfesores.set(Array.isArray(list) ? list : []),
+      error: err => { console.error('buscarProfesores error', err); this.availableProfesores.set([]); }
+    });
+  }
+
+  doAssignProfesor() {
+    const cursoId = this.cursoEnVistaAssign?.id ?? this.cursoEnVistaAssign?.['id'];
+    const profesorId = Number(this.assignSelectedProfessor);
+
+    if (!cursoId || !Number.isFinite(profesorId) || profesorId <= 0) {
+      console.warn('IDs inválidos para asignar', { cursoId, profesorId });
+      return;
+    }
+
+    console.log('Asignando profesor', { cursoId, profesorId });
+
+    this.coursesService.asignarProfesor(cursoId, profesorId).subscribe({
+      next: () => {
+        console.log('Asignación OK');
+        try { if (typeof this.coursesService.load === 'function') this.coursesService.load(); } catch {}
+        this.closeAssignModal();
+      },
+      error: err => {
+        console.error('Error asignando (url):', err);
+        this.coursesService.asignarProfesorDto({ cursoId, profesorId }).subscribe({
+          next: () => { console.log('Asignación por DTO OK'); this.closeAssignModal(); },
+          error: e2 => { console.error('Asignación por DTO falló', e2); this.closeAssignModal(); }
+        });
+      }
+    });
+  }
+
+  closeAssignModal() {
+    this.showAssignModal.set(false);
+    this.availableProfesores.set([]);
+    this.cursoEnVistaAssign = null;
+    this.assignSelectedProfessor = null;
+    this.assignSearchTerm = '';
   }
 }
 

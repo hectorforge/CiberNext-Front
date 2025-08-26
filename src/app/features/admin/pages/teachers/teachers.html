@@ -7,10 +7,30 @@
         <h1 class="text-4xl font-semibold text-slate-900">Profesores</h1>
         <p class="mt-1 text-base text-slate-500">Gestión y detalle de profesores</p>
       </div>
-      <button (click)="openNew()"
-              class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
-        Nuevo Profesor
-      </button>
+
+      <!-- SEARCH: agregado -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center bg-white border border-slate-200 rounded-md px-3 py-2 shadow-sm">
+          <svg class="h-5 w-5 text-slate-400 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
+          </svg>
+
+          <input #q type="search"
+                 placeholder="Buscar por nombre, apellido o código"
+                 class="outline-none text-sm text-slate-700 w-64"
+                 (input)="onSearch(q.value)"
+                 [value]="searchTerm" />
+
+          <button *ngIf="searchTerm" (click)="onSearch('')" class="ml-3 px-3 py-1 text-sm text-slate-500 hover:text-slate-700 rounded">
+            Limpiar
+          </button>
+        </div>
+
+        <button (click)="openNew()"
+                class="px-5 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg text-sm font-medium">
+          Nuevo Profesor
+        </button>
+      </div>
     </div>
 
     <!-- Tabla -->
@@ -37,7 +57,6 @@
               <td class="px-4 py-4 text-slate-600 text-sm align-top">{{ p.email }}</td>
               <td class="px-4 py-4 text-sm align-top">
                 <div class="flex gap-2 justify-center">
-                  <!-- botones mantienen su funcionalidad -->
                   <button class="px-3 py-1 bg-amber-400 hover:bg-amber-500 rounded-md text-sm" (click)="openEdit(p)">Editar</button>
                   <button class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm" (click)="confirmDelete(p)">Eliminar</button>
                   <button class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm" (click)="abrirConsultas(p)">Consultas</button>
@@ -55,7 +74,6 @@
         </table>
       </div>
 
-      <!-- Footer: Paginación (copiado / adaptado de courses.html) -->
       <div class="px-4 py-3 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-3">
         <div class="text-sm text-slate-600">
           Mostrando
@@ -130,7 +148,7 @@
       </div>
     </div>
 
-    <!-- Modal: Nuevo / Editar Profesor (layout visual: 2 columnas) -->
+    <!-- Modal: Nuevo / Editar Profesor -->
     <div *ngIf="selectedProfesorValue" class="fixed inset-0 z-70 flex items-center justify-center bg-black/50 p-4">
       <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl overflow-hidden">
         <div class="flex items-center justify-between px-6 py-3 border-b">
@@ -150,13 +168,10 @@
           <button (click)="cancel()" class="text-slate-500 hover:text-slate-700">Cerrar ✕</button>
         </div>
 
-        <!-- estilos visuales locales: eliminado, ahora usamos la clase .grid-form en CSS global -->
          <div class="p-6">
            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-             <!-- Formulario (ocupa 2/3) -->
             <div class="md:col-span-3">
                <div class="bg-slate-50 border border-slate-100 rounded-lg p-4">
-                 <!-- mantenemos el componente dinámico tal cual (no añadimos lógica) -->
                 <app-dynamic-form
                   class="grid-form"
                   #dynFormRef
@@ -249,11 +264,9 @@
     <!-- Modal: Consultas del profesor (mejorado visualmente; sin "Respondida por:") -->
     <div *ngIf="showConsultasModal" class="fixed inset-0 z-70 flex items-center justify-center bg-black/60 p-4">
       <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl overflow-hidden max-h-[90vh] flex flex-col">
-        <!-- HEADER -->
         <div class="px-6 py-4 border-b flex items-center justify-between gap-4">
           <div class="flex items-center gap-3 min-w-0">
             <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-50 text-indigo-600">
-              <!-- icono chat -->
               <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.84L3 20l.84-3A7.97 7.97 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -273,7 +286,6 @@
 
         <!-- CONTENIDO (scrollable) -->
         <div class="p-4 overflow-y-auto flex-1">
-          <!-- filtros -->
           <div class="flex items-center gap-3 mb-4">
             <div class="inline-flex rounded-md shadow-sm bg-slate-50 p-1">
               <button (click)="cambiarTipoConsultas('no-respondidas')"
@@ -321,7 +333,6 @@
                       </div>
                     </div>
 
-                    <!-- estado a la derecha -->
                     <div class="ml-auto flex-shrink-0 text-right">
                       <div *ngIf="c.respuesta" class="inline-flex items-center gap-2 text-emerald-600 font-medium text-sm">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -338,7 +349,6 @@
                     </div>
                   </div>
 
-                  <!-- respuesta (si existe) -->
                   <div *ngIf="c.respuesta" class="mt-3 p-3 bg-slate-50 rounded text-sm text-slate-700 border">
                     <div class="font-medium mb-1">Respuesta</div>
                     <div class="whitespace-pre-wrap">{{ c.respuesta }}</div>
@@ -352,8 +362,6 @@
             No hay consultas para mostrar.
           </div>
         </div>
-
-        <!-- FOOTER -->
         <div class="px-6 py-4 border-t flex justify-end gap-3 flex-shrink-0">
           <button class="px-4 py-2 bg-gray-200 rounded" (click)="cerrarConsultas()">Cerrar</button>
         </div>
