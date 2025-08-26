@@ -39,7 +39,26 @@ export class RegisterStudentsService {
   }
   
   save(payload: RegistroAlumnoRequestDto) {
-    this.http.post<RegistroAlumnoResponseDto>(this.api, payload).subscribe(() => this.load());
+    this.http.post<RegistroAlumnoResponseDto>(this.api, payload).subscribe({
+      next: () => {
+        this.load();
+      },
+      error: (err) => {
+        const status = err?.status ?? 0;
+        const serverMsg = err?.error?.message || err?.error?.mensaje || null;
+        if (status === 409 || status === 400) {
+          const msg = serverMsg || 'El profesor no está asignado para dictar este curso.';
+          alert(msg);
+          return;
+        }
+        alert('Error al registrar el alumno. Código: ' + status + (serverMsg ? ' — ' + serverMsg : ''));
+      }
+    });
+  }
+
+  // Nuevo: registrar pero devolver la respuesta para que el componente la maneje (sin hacer alert())
+  registerAlumno(payload: RegistroAlumnoRequestDto) {
+    return this.http.post<RegistroAlumnoResponseDto>(this.api, payload, { observe: 'response' as const });
   }
   
   delete(id: number) {

@@ -95,6 +95,10 @@ export class RegisterStudents {
   profesores: any[] = [];
   nuevoRegistro: RegistroAlumnoRequestDto = { cursoId: 0, alumnoId: 0, profesorId: 0 };
 
+  // --- MENSAJES DE ÉXITO / ERROR ---
+  errorMessage = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
+
   constructor(public service: RegisterStudentsService) {
     if (typeof this.service.load === 'function') {
       try { this.service.load(); } catch {}
@@ -119,17 +123,40 @@ export class RegisterStudents {
   }
   cancel() { this.showModal.set(false); }
 
-  save() {
-    if (!this.nuevoRegistro.cursoId || !this.nuevoRegistro.alumnoId || !this.nuevoRegistro.profesorId) {
-      alert('Debe seleccionar curso, alumno y profesor');
-      return;
-    }
-    if (typeof this.service.save === 'function') {
-      this.service.save(this.nuevoRegistro);
-    }
-    this.cancel();
+  // Llamar desde la UI en lugar de service.save() para mostrar alertas en la vista
+  registrarEnVista(payload: RegistroAlumnoRequestDto) {
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
+
+    this.service.registerAlumno(payload).subscribe({
+      next: resp => {
+        const status = resp?.status ?? 0;
+        if (status >= 200 && status < 300) {
+          this.successMessage.set('Alumno registrado correctamente.');
+          this.service.load();
+        } else {
+          this.errorMessage.set('Error al registrar el alumno. Código: ' + status);
+        }
+      },
+      error: err => {
+        const status = err?.status ?? 0;
+        const serverMsg = err?.error?.message || err?.error?.mensaje || null;
+        if (status === 409 || status === 400) {
+          this.errorMessage.set(serverMsg || 'El profesor no está asignado para dictar este curso.');
+        } else {
+          this.errorMessage.set('Error al registrar el alumno. Código: ' + status + (serverMsg ? ' — ' + serverMsg : ''));
+        }
+      }
+    });
   }
 
+  // Wrapper para compatibilidad con la plantilla
+  save(payload?: RegistroAlumnoRequestDto) {
+    const p = payload ?? this.nuevoRegistro;
+    this.registrarEnVista(p);
+    this.showModal.set(false);
+  }
+  
   // eliminar
   confirmDelete(r: RegistroAlumnoResponseDto) {
     this.registroParaEliminar.set(r);
