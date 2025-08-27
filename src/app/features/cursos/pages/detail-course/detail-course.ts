@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CourseService } from '@features/cursos/services/course-service';
+import { AuthService } from '@core/services/auth-service';
 
 interface Documento {
   documentoId: number;
@@ -35,26 +36,37 @@ interface Curso {
 export class DetailCourse implements OnInit {
   private route = inject(ActivatedRoute);
   private courseService = inject(CourseService);
+  private authTokenService = inject(AuthService);
 
+  userId!: number;
   curso!: Curso;
   videoUrl: string | null = null;
   loading = true;
   error: string | null = null;
 
+
+
   ngOnInit(): void {
     const courseId = Number(this.route.snapshot.paramMap.get('id'));
+
+    const token: any = this.authTokenService.decodeToken();
+    this.userId = token?.userId;
+
     if (!courseId) return;
 
-    this.courseService.getCursoPorIdEstudiante(9).subscribe({ // 🔹 aquí 9 es fijo, deberías pasarlo dinámico según user
+    this.courseService.getCursoPorIdEstudiante(this.userId).subscribe({
       next: (data: any[]) => {
+
         const cursoPlano = data.filter(c => c.cursoId === courseId);
+
+        console.log('Filtro plano ', cursoPlano);
+
         if (!cursoPlano.length) {
           this.error = 'Curso no encontrado';
           this.loading = false;
           return;
         }
         this.curso = this.groupByCurso(cursoPlano);
-        // Seleccionar primer video como predeterminado
         const firstVideo = this.curso.unidades
           .flatMap(u => u.documentos)
           .find(d => d.tipoDocumentoExtension === 'mp4');
