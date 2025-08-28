@@ -61,6 +61,12 @@ export class ConsultaService {
     }
   }
 
+  getConsultasPorUnidad(idUnidad: number): Observable<ConsultaDto[]> {
+    return this.httpClient.get<ConsultaDto[]>(
+        `${this.api}/unidad/${idUnidad}/todas`
+      );
+  }
+
   registrarConsulta(request: ConsultaRequestDto): Observable<any> {
     return this.httpClient.post(`${this.api}/registrar`, request);
   }

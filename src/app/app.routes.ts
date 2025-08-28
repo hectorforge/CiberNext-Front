@@ -19,6 +19,7 @@ import { Teachers } from '@features/admin/pages/teachers/teachers';
 import { AreaSpecialization } from '@features/admin/pages/area-specialization/area-specialization';
 import { routesi } from '@features/profesor/profesor.router'; 
 import { ConsultaUsuario } from '@features/consulta/consulta-usuario/consulta-usuario';
+import { ConsultaUnidadAprendizaje } from '@features/consulta/consulta-unidad-aprendizaje/consulta-unidad-aprendizaje';
 export const routes: Routes = [
 
   // Componentes para test
@@ -36,6 +37,20 @@ export const routes: Routes = [
       {path: 'me', component: Perfil, canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
       { path: 'detail/course/:id', component: DetailCourse,canActivate: [userGuardGuard],data: {roles : ['ALUMNO']} },
       {path: 'consultas', component:ConsultaUsuario, canActivate: [userGuardGuard], data: {roles : ['ALUMNO']} },
+      // {
+      //   path: 'descripcion',
+      //   component: DescripcionGeneralComponent
+      // },
+      {
+        path: 'preguntas-respuestas',
+        component: ConsultaUnidadAprendizaje,
+        children: [
+          {
+            path: 'unidad/:id',
+            component: ConsultaUnidadAprendizaje
+          }
+        ]
+      }
     ]
   },
 

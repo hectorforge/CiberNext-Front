@@ -1,0 +1,41 @@
+<div class="w-full max-w-4xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+  <!-- <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 bg-white rounded-xl shadow p-4">
+    <div class="flex gap-2">
+      <button
+        (click)="mostrarTodas()"
+        [ngClass]="vistaActual === 'todas' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-indigo-700'"
+        class="px-4 py-1 rounded hover:bg-indigo-700 transition-colors"
+      >
+        Todas
+      </button>
+      <button
+        (click)="mostrarNoRespondidas()"
+        [ngClass]="vistaActual === 'no-respondidas' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-indigo-700'"
+        class="px-4 py-1 rounded hover:bg-indigo-700 transition-colors"
+      >
+        No respondidas
+      </button>
+    </div>
+    <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full sm:w-auto">
+      <label for="curso" class="font-medium text-gray-700">Filtrar por curso:</label>
+      <select [(ngModel)]="cursoSeleccionado" id="curso" class="p-2 border rounded w-full sm:w-64">
+        <option value="">Todos los cursos</option>
+        <option *ngFor="let curso of agrupadas" [value]="curso.curso">{{ curso.curso }}</option>
+      </select>
+    </div>
+  </div> -->
+
+  <div class="space-y-8">
+    <div *ngFor="let curso of agrupadas | cursoFiltro:cursoSeleccionado" class="bg-white rounded-xl shadow p-6">      
+      <div *ngFor="let unidad of curso.unidades" class="mb-6">
+        <div class="space-y-2">
+          <app-consulta-mensaje *ngFor="let consulta of unidad.consultas" [consulta]="consulta"  />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="agrupadas.length === 0" class="text-center text-gray-500 py-8">
+    No hay consultas para mostrar.
+  </div>
+</div>

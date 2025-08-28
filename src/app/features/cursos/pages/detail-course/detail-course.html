@@ -4,7 +4,7 @@
     <h1 class="ml-4 text-xl">{{ curso?.cursoNombre }}</h1>
   </div>
 
-  
+
   <div class="flex items-center space-x-4">
     <button class="flex items-center space-x-2">
       <span class="text-sm">Tu progreso</span>
@@ -35,17 +35,31 @@
     <!-- Tabs -->
     <div class="bg-white rounded-lg p-6 shadow-md">
       <div class="border-b border-gray-200">
-        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-          <a routerLink="./descripcion"
-             class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 
+        <!-- <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <a routerLink="./descripcion" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 
              hover:text-gray-700 hover:border-gray-300">Descripción general</a>
-          <a routerLink="./preguntas-respuestas"
-             class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 
+          <a routerLink="./preguntas-respuestas" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 
              hover:text-gray-700 hover:border-gray-300">Preguntas y respuestas</a>
+        </nav> -->
+        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <a (click)="setTab('descripcion')" [class.border-blue-500]="activeTab === 'descripcion'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 
+     hover:text-gray-700 hover:border-gray-300 cursor-pointer">Descripción general</a>
+          <a (click)="setTab('preguntas-respuestas')" [class.border-blue-500]="activeTab === 'preguntas-respuestas'"
+            class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 
+     hover:text-gray-700 hover:border-gray-300 cursor-pointer">Preguntas y respuestas</a>
         </nav>
       </div>
       <div class="mt-6">
-        <router-outlet></router-outlet>
+
+        <div class="mt-6">
+          <ng-container *ngIf="activeTab === 'preguntas-respuestas'">
+            <app-consulta-unidad-aprendizaje [unidadId]="11"/>
+          </ng-container>
+          <ng-container *ngIf="activeTab === 'descripcion'">
+            <!-- Aquí iría el contenido de descripción general -->
+          </ng-container>
+        </div>
+
       </div>
     </div>
   </div>
@@ -59,14 +73,16 @@
       <details *ngFor="let unidad of curso?.unidades" class="group">
         <summary class="flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100 cursor-pointer rounded-lg">
           <span class="font-semibold text-gray-800">{{ unidad.unidadNombre }}</span>
-          <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </summary>
         <div class="p-4 bg-white border-l-2 border-gray-200">
           <ul class="space-y-2">
-            <li *ngFor="let doc of unidad.documentos" class="flex items-center text-gray-600 cursor-pointer hover:text-blue-600"
-                (click)="doc.tipoDocumentoExtension === 'mp4' ? playVideo(doc.documentoArchivo) : null">
+            <li *ngFor="let doc of unidad.documentos"
+              class="flex items-center text-gray-600 cursor-pointer hover:text-blue-600"
+              (click)="doc.tipoDocumentoExtension === 'mp4' ? playVideo(doc.documentoArchivo) : null">
               <span class="mr-2">{{ getIcon(doc.tipoDocumentoExtension) }}</span>
               <span>{{ doc.documentoNombre }}</span>
             </li>

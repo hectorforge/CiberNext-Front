@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CourseService } from '@features/cursos/services/course-service';
 import { AuthService } from '@core/services/auth-service';
+import { ConsultaUnidadAprendizaje } from '@features/consulta/consulta-unidad-aprendizaje/consulta-unidad-aprendizaje';
 
 interface Documento {
   documentoId: number;
@@ -30,7 +31,7 @@ interface Curso {
 @Component({
   selector: 'app-detail-course',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, CommonModule],
+  imports: [RouterLink, RouterOutlet, CommonModule, ConsultaUnidadAprendizaje],
   templateUrl: './detail-course.html'
 })
 export class DetailCourse implements OnInit {
@@ -43,8 +44,11 @@ export class DetailCourse implements OnInit {
   videoUrl: string | null = null;
   loading = true;
   error: string | null = null;
+  activeTab: 'descripcion' | 'preguntas-respuestas' = 'descripcion';
 
-
+  setTab(tab: 'descripcion' | 'preguntas-respuestas') {
+    this.activeTab = tab;
+  }
 
   ngOnInit(): void {
     const courseId = Number(this.route.snapshot.paramMap.get('id'));
