@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center h-16">
 
       <!-- Logo -->
-      <a routerLink="/" class="text-2xl font-bold tracking-wide hover:scale-110 transition-transform duration-300">
+      <a routerLink="/home" class="text-2xl font-bold tracking-wide hover:scale-110 transition-transform duration-300">
         CiberNext
       </a>
 
@@ -21,7 +21,7 @@
       <div class="hidden md:flex items-center space-x-6 font-medium">
 
         <!-- Links comunes -->
-        <a routerLink="/" class="relative hover:text-yellow-200 transition-colors duration-300 group">
+        <a routerLink="/home" class="relative hover:text-yellow-200 transition-colors duration-300 group">
           Inicio
           <span
             class="absolute bottom-0 left-0 w-0 h-[2px] bg-yellow-200 transition-all duration-300 group-hover:w-full"></span>
@@ -84,7 +84,7 @@
          [class.max-h-96]="isMenuOpen">
       <div class="flex flex-col space-y-2 mt-3 pb-4 border-t border-white/20 pt-3 font-medium">
 
-        <a routerLink="/" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>        
+        <a routerLink="/home" class="hover:text-yellow-200 transition-colors duration-300">Inicio</a>        
 
         @if (isLoggedIn()) {
           <!-- Perfil arriba en mobile -->

@@ -51,6 +51,7 @@ export class DetailCourse implements OnInit {
   unidadSeleccionada: Unidad | null = null;
   documentoSeleccionado: Documento | null = null;
   URLBase: string = environment.URLBase;
+  expandedUnidadId: number | null = null;
 
   setTab(tab: 'descripcion' | 'preguntas-respuestas') {
     this.activeTab = tab;
@@ -60,6 +61,7 @@ export class DetailCourse implements OnInit {
     this.unidadSeleccionadaId = id;
     this.unidadSeleccionada =
       this.curso?.unidades.find((u) => u.unidadId === id) || null;
+    this.expandedUnidadId = id; // <-- Añade esto
     this.setTab('descripcion');
   }
 

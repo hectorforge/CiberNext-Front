@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CourseService } from '@features/cursos/services/course-service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@core/services/auth-service';
+import { environment } from '@envs/environment';
 
 interface Documento {
   documentoId: number;
@@ -44,6 +45,8 @@ export class Home implements OnInit {
   error: string | null = null;
 
   private userId!: string | null | undefined;
+
+  URLBase: string = environment.URLBase;
 
   ngOnInit(): void {
     const token: any = this.authTokenService.decodeToken();
