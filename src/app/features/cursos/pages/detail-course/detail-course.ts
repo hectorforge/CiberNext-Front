@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { CourseService } from '@features/cursos/services/course-service';
 import { AuthService } from '@core/services/auth-service';
 import { ConsultaUnidadAprendizaje } from '@features/consulta/consulta-unidad-aprendizaje/consulta-unidad-aprendizaje';
+import { SafeUrlPipe } from '@features/consulta/safe-url-pipe';
+import { environment } from '@envs/environment';
 
 interface Documento {
   documentoId: number;
@@ -31,7 +33,7 @@ interface Curso {
 @Component({
   selector: 'app-detail-course',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, CommonModule, ConsultaUnidadAprendizaje],
+  imports: [RouterLink, RouterOutlet, CommonModule, ConsultaUnidadAprendizaje, SafeUrlPipe],
   templateUrl: './detail-course.html',
 })
 export class DetailCourse implements OnInit {
@@ -47,6 +49,8 @@ export class DetailCourse implements OnInit {
   activeTab: 'descripcion' | 'preguntas-respuestas' = 'descripcion';
   unidadSeleccionadaId: number | null = null;
   unidadSeleccionada: Unidad | null = null;
+  documentoSeleccionado: Documento | null = null;
+  URLBase: string = environment.URLBase;
 
   setTab(tab: 'descripcion' | 'preguntas-respuestas') {
     this.activeTab = tab;
@@ -77,9 +81,9 @@ export class DetailCourse implements OnInit {
           this.error = 'Curso no encontrado';
           this.loading = false;
           return;
-        }        
+        }
         this.curso = this.groupByCurso(cursoPlano);
-        
+
         const firstVideo2 = this.curso.unidades
           .flatMap((u) => u.documentos)
           .find((d) => d.tipoDocumentoExtension === 'mp4');
@@ -166,5 +170,21 @@ export class DetailCourse implements OnInit {
       default:
         return '📁';
     }
+  }
+
+  mostrarInfoDocumento(doc: Documento, unidad: Unidad) {
+    console.log('Documento seleccionado:', doc);
+    this.seleccionarUnidad(unidad.unidadId);
+    this.documentoSeleccionado = doc;
+  }
+
+  getYoutubeEmbedUrl(url: string): string {
+    // Ejemplo: https://www.youtube.com/watch?v=VIDEO_ID
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      return `https://www.youtube.com/embed/${match[2]}`;
+    }
+    return url;
   }
 }

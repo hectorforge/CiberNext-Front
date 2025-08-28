@@ -18,17 +18,81 @@
 </header>
 
 <main class="flex flex-col lg:flex-row min-h-screen bg-gray-100" *ngIf="!loading && !error">
-  <!-- VIDEO -->
+  <!-- CONTENIDO -->
   <div class="flex-1 p-8">
     <div class="bg-black rounded-lg overflow-hidden mb-6 h-[28rem] flex items-center justify-center text-white">
-      <ng-container *ngIf="videoUrl; else noVideo">
-        <video controls autoplay class="w-full h-full object-cover">
-          <source [src]="videoUrl" type="video/mp4" />
-          Tu navegador no soporta la reproducción de video.
-        </video>
+      <ng-container *ngIf="documentoSeleccionado; else placeholder">
+        <!-- Video-lección (YouTube) -->
+        <ng-container *ngIf="documentoSeleccionado.tipoDocumentoNombre === 'Video-lección'">
+          <div class="w-full h-full flex flex-col items-center justify-center">
+            <h2 class="text-2xl font-bold mb-2 text-white">{{ documentoSeleccionado.documentoNombre }}</h2>
+            <div class="w-full h-[20rem] flex items-center justify-center">
+              <iframe
+                [src]="getYoutubeEmbedUrl(documentoSeleccionado.documentoArchivo) | safeUrl"
+                frameborder="0"
+                allowfullscreen
+                class="w-full h-full rounded-lg shadow-lg bg-black"
+              ></iframe>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- PDF-Lectura -->
+        <ng-container *ngIf="documentoSeleccionado.tipoDocumentoNombre === 'PDF-Lectura'">
+          <div class="w-full h-full flex flex-col items-center justify-center">
+            <h2 class="text-2xl font-bold mb-2 text-white">{{ documentoSeleccionado.documentoNombre }}</h2>            
+            <iframe
+              [src]="URLBase + documentoSeleccionado.documentoArchivo | safeUrl"
+              class="w-full h-[20rem] rounded-lg shadow-lg bg-white"
+            ></iframe>
+          </div>
+        </ng-container>
+
+        <!-- Código Fuente -->
+        <ng-container *ngIf="documentoSeleccionado.tipoDocumentoNombre === 'Código Fuente'">
+          <div class="w-full h-full flex flex-col items-center justify-center">
+            <h2 class="text-2xl font-bold mb-2 text-white">{{ documentoSeleccionado.documentoNombre }}</h2>
+            <ul class="bg-gray-900 rounded-lg p-4 w-full max-w-lg">
+              <li>
+                <a
+                  [href]="URLBase + documentoSeleccionado.documentoArchivo"
+                  download
+                  class="text-blue-400 hover:underline"
+                >
+                  Descargar archivo
+                </a>
+              </li>
+            </ul>
+          </div>
+        </ng-container>
+
+        <!-- Enlace Externo -->
+        <ng-container *ngIf="documentoSeleccionado.tipoDocumentoNombre === 'Enlace Externo'">
+          <div class="w-full h-full flex flex-col items-center justify-center">
+            <h2 class="text-2xl font-bold mb-2 text-white">{{ documentoSeleccionado.documentoNombre }}</h2>            
+            <a
+              [href]="documentoSeleccionado.documentoArchivo"
+              target="_blank"
+              class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+            >
+              Ir al enlace externo
+            </a>
+          </div>
+        </ng-container>
+
+        <!-- Presentación -->
+        <ng-container *ngIf="documentoSeleccionado.tipoDocumentoNombre === 'Presentación'">
+          <div class="w-full h-full flex flex-col items-center justify-center">
+            <h2 class="text-2xl font-bold mb-2 text-white">{{ documentoSeleccionado.documentoNombre }}</h2>            
+            <iframe
+              [src]="URLBase + documentoSeleccionado.documentoArchivo | safeUrl"
+              class="w-full h-[20rem] rounded-lg shadow-lg bg-white"
+            ></iframe>
+          </div>
+        </ng-container>
       </ng-container>
-      <ng-template #noVideo>
-        <p class="text-gray-400">Selecciona un video para reproducir</p>
+      <ng-template #placeholder>
+        <span class="text-gray-400 text-lg">Selecciona un documento para ver su contenido aquí.</span>
       </ng-template>
     </div>
 
@@ -91,9 +155,11 @@
         </summary>
         <div class="p-4 bg-white border-l-2 border-gray-200">
           <ul class="space-y-2">
-            <li *ngFor="let doc of unidad.documentos"
+            <li
+              *ngFor="let doc of unidad.documentos"
               class="flex items-center text-gray-600 cursor-pointer hover:text-blue-600"
-              (click)="doc.tipoDocumentoExtension === 'mp4' ? playVideo(doc.documentoArchivo) : null">
+              (click)="mostrarInfoDocumento(doc, unidad)"
+            >
               <span class="mr-2">{{ getIcon(doc.tipoDocumentoExtension) }}</span>
               <span>{{ doc.documentoNombre }}</span>
             </li>

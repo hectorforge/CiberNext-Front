@@ -10,6 +10,7 @@ export const environment = {
     apiURLDocumentos: 'http://localhost:8080/api/documentos',
     apiURLUnidades: 'http://localhost:8080/api/unidades',
     apiURLConsultas: 'http://localhost:8080/api/consultas',
+    URLBase: 'http://localhost:8080'
 
     // Mas rutas que solo llaramas con la clave
 };
