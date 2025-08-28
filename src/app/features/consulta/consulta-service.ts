@@ -71,6 +71,10 @@ export class ConsultaService {
     return this.httpClient.post(`${this.api}/registrar`, request);
   }
 
+  responderConsulta(request: ConsultaRequestDto): Observable<any> {
+    return this.httpClient.post(`${this.api}/registrar`, request);
+  }
+
   agrupadas: any[] = [];
 
   agruparConsultasPorCursoYUnidad(consultas: ConsultaDto[]) {

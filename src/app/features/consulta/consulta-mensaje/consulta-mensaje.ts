@@ -46,7 +46,7 @@ export class ConsultaMensaje {
       registroAlumnoId: this.consulta.idRegistroAlumno,
     };
     console.log('request', request);
-    this.consultaService.registrarConsulta(request).subscribe(() => {
+    this.consultaService.responderConsulta(request).subscribe(() => {
       this.nuevaRespuesta = '';
       this.mostrarFormulario = false;
       this.consultaRegistrada.emit();
