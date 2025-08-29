@@ -556,6 +556,16 @@ export class Courses {
     this.assignSelectedProfessor = null;
     this.assignSearchTerm = '';
   }
+
+  eliminarDocumento(id: number) {
+    if (!id) return;
+    if (confirm('¿Eliminar este documento?')) {
+      this.coursesService.eliminarDocumento(id).subscribe({
+        next: () => this.postGuardarReload(),
+        error: () => this.postGuardarReload()
+      });
+    }
+  }
 }
 
 export const routes: Routes = [

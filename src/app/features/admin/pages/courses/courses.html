@@ -296,53 +296,52 @@
       <!-- Lista de documentos -->
       <ul class="space-y-3">
         <li *ngFor="let d of documentos()" class="p-3 rounded-md border hover:bg-gray-50">
-          
-            <!-- Si se está editando este documento -->
-            <div *ngIf="editingDocumento?.id === d.id; else verDocumento">
-              <input [(ngModel)]="editingDocumento.nombre"
-                     name="docNombre{{d.id}}"
-                     placeholder="Nombre"
-                     class="w-full mb-2 border rounded px-2 py-1 text-sm"/>
+          <!-- Si se está editando este documento -->
+          <div *ngIf="editingDocumento?.id === d.id; else verDocumento">
+            <input [(ngModel)]="editingDocumento.nombre"
+                   name="docNombre{{d.id}}"
+                   placeholder="Nombre"
+                   class="w-full mb-2 border rounded px-2 py-1 text-sm"/>
 
-              <textarea [(ngModel)]="editingDocumento.descripcion"
-                        name="docDescripcion{{d.id}}"
-                        placeholder="Descripción"
-                        class="w-full mb-2 border rounded px-2 py-1 text-sm"></textarea>
+            <textarea [(ngModel)]="editingDocumento.descripcion"
+                      name="docDescripcion{{d.id}}"
+                      placeholder="Descripción"
+                      class="w-full mb-2 border rounded px-2 py-1 text-sm"></textarea>
 
-              <input [(ngModel)]="editingDocumento.archivo"
-                     name="docArchivo{{d.id}}"
-                     placeholder="URL archivo"
-                     class="w-full mb-2 border rounded px-2 py-1 text-sm"/>
+            <input [(ngModel)]="editingDocumento.archivo"
+                   name="docArchivo{{d.id}}"
+                   placeholder="URL archivo"
+                   class="w-full mb-2 border rounded px-2 py-1 text-sm"/>
 
-              <!-- Combo: Tipo de documento -->
-              <select [(ngModel)]="editingDocumento.idTipoDocumento"
-                      name="docTipo{{d.id}}"
-                      class="w-full mb-2 border rounded px-2 py-1 text-sm">
-                <option [ngValue]="null">-- Tipo de documento --</option>
-                <option *ngFor="let t of tiposDocumento" [value]="t.id">{{ t.nombre ?? t.nombreTipo ?? t.label }}</option>
-              </select>
+            <!-- Combo: Tipo de documento -->
+            <select [(ngModel)]="editingDocumento.idTipoDocumento"
+                    name="docTipo{{d.id}}"
+                    class="w-full mb-2 border rounded px-2 py-1 text-sm">
+              <option [ngValue]="null">-- Tipo de documento --</option>
+              <option *ngFor="let t of tiposDocumento" [value]="t.id">{{ t.nombre ?? t.nombreTipo ?? t.label }}</option>
+            </select>
 
-              <!-- Combo: Unidad -->
-              <select [(ngModel)]="editingDocumento.idUnidadAprendizaje"
-                      name="docUnidad{{d.id}}"
-                      class="w-full mb-2 border rounded px-2 py-1 text-sm">
-                <option [ngValue]="null">-- Unidad --</option>
-                <option *ngFor="let u of unidades" [ngValue]="u.id">
-                  {{ u.nombre ?? u.nombreUnidadaprendizaje ?? u.titulo ?? ('Unidad ' + u.id) }}
-                </option>
-              </select>
+            <!-- Combo: Unidad -->
+            <select [(ngModel)]="editingDocumento.idUnidadAprendizaje"
+                    name="docUnidad{{d.id}}"
+                    class="w-full mb-2 border rounded px-2 py-1 text-sm">
+              <option [ngValue]="null">-- Unidad --</option>
+              <option *ngFor="let u of unidades" [ngValue]="u.id">
+                {{ u.nombre ?? u.nombreUnidadaprendizaje ?? u.titulo ?? ('Unidad ' + u.id) }}
+              </option>
+            </select>
 
-              <div class="flex gap-2 justify-end">
-                <button type="button" (click)="guardarDocumento()"
-                        class="inline-flex items-center justify-center px-3 py-2 h-10 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
-                  Guardar
-                </button>
-                <button type="button" (click)="cancelEditarDocumento()"
-                        class="inline-flex items-center justify-center px-3 py-2 h-10 bg-gray-300 hover:bg-gray-400 text-black rounded text-sm">
-                  Cancelar
-                </button>
-              </div>
+            <div class="flex gap-2 justify-end">
+              <button type="button" (click)="guardarDocumento()"
+                      class="inline-flex items-center justify-center px-3 py-2 h-10 bg-green-600 hover:bg-green-700 text-white rounded text-sm">
+                Guardar
+              </button>
+              <button type="button" (click)="cancelEditarDocumento()"
+                      class="inline-flex items-center justify-center px-3 py-2 h-10 bg-gray-300 hover:bg-gray-400 text-black rounded text-sm">
+                Cancelar
+              </button>
             </div>
+          </div>
 
           <!-- Vista normal -->
           <ng-template #verDocumento>
@@ -351,10 +350,16 @@
                 <div class="font-medium text-gray-800">{{ d.nombre }}</div>
                 <div class="text-sm text-gray-600">{{ d.descripcion }}</div>
               </div>
-              <button (click)="startEditarDocumento(d)"
-                      class="inline-flex items-center justify-center px-3 py-2 h-10 bg-amber-500 hover:bg-amber-600 text-white rounded text-sm">
-                Editar
-              </button>
+              <div class="flex gap-2">
+                <button (click)="startEditarDocumento(d)"
+                        class="inline-flex items-center justify-center px-3 py-2 h-10 bg-amber-500 hover:bg-amber-600 text-white rounded text-sm">
+                  Editar
+                </button>
+                <button (click)="eliminarDocumento(d.id!)"
+                        class="inline-flex items-center justify-center px-3 py-2 h-10 bg-red-500 hover:bg-red-600 text-white rounded text-sm">
+                  Eliminar
+                </button>
+              </div>
             </div>
           </ng-template>
         </li>
