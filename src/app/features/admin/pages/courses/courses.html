@@ -276,7 +276,7 @@
 
    <!-- Modal: Documentos -->
 <div *ngIf="showDocumentos()" class="fixed inset-0 z-60 flex items-center justify-center bg-black/50 p-4">
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden">
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden flex flex-col" style="max-height: 90vh;">
     <!-- HEADER: solo título y subtítulo -->
     <div class="px-6 py-4 border-b">
       <div>
@@ -287,7 +287,8 @@
       </div>
     </div>
 
-    <div class="p-6 space-y-3">
+    <!-- SCROLLABLE CONTENT -->
+    <div class="p-6 space-y-3 overflow-y-auto flex-1" style="min-height: 0;">
       <!-- Si no hay documentos -->
       <div *ngIf="(documentos() || []).length === 0" class="text-center text-sm text-gray-500">
         No se encontraron documentos.
