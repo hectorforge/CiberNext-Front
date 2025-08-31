@@ -1,8 +1,11 @@
 <div class="p-4 bg-gray-100 min-h-screen">
   <div *ngIf="loading" class="text-center py-10 text-gray-500">Cargando cursos...</div>
-  <div *ngIf="error" class="text-center py-10 text-red-500">{{ error }}</div>
+  
+  <div *ngIf="!loading && cursos.length === 0" class="text-center text-red-500 py-8">
+    No tienes cursos asignados actualmente.
+  </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" *ngIf="!loading && !error">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" *ngIf="!loading && cursos.length > 0">
     <a *ngFor="let curso of cursos"
        [routerLink]="['/home/detail/course', curso.cursoId]"
        class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl block no-underline text-inherit">

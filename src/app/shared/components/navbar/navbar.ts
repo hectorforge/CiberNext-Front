@@ -16,6 +16,7 @@ export class Navbar {
 
   usuario: any = null;
   isMenuOpen = false;
+  isDropdownOpen = false;
 
   ngOnInit(): void {
     if (this.isLoggedIn()) {
@@ -44,6 +45,14 @@ export class Navbar {
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen = false;
   }
 
   logout(): void {

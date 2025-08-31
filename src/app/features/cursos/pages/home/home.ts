@@ -61,7 +61,9 @@ export class Home implements OnInit {
     this.courseService.getCursoPorIdEstudiante(Number(this.userId)).subscribe({
       next: (data) => {
         this.cursos = this.groupByCurso(data);
-        console.log('Cursos agrupados:', this.cursos);
+        if (this.cursos.length === 0) {
+          this.error = 'No tienes cursos asignados actualmente.';
+        }
         this.loading = false;
       },
       error: (err) => {

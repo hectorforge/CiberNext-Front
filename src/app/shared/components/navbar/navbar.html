@@ -36,22 +36,28 @@
         </a>
 
           <!-- Menu usuario -->
-          <div class="relative group">
+          <div class="relative">
             <button
-              class="flex items-center space-x-3 hover:scale-105 transition-transform duration-300 focus:outline-none">
+              class="flex items-center space-x-3 hover:scale-105 transition-transform duration-300 focus:outline-none"
+              (click)="toggleDropdown()"
+              tabindex="0"
+            >
               <img [src]="getFotoPerfil()" alt="Foto"
                    class="w-10 h-10 rounded-full border-2 border-white shadow-md">
               <span class="font-semibold">{{ getNombreCompleto() }}</span>
-              <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180"
+              <svg class="w-4 h-4 transition-transform duration-300"
                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
-            <!-- Dropdown -->
+            <!-- Dropdown controlado por isDropdownOpen -->
             <div
-              class="absolute right-0 mt-2 w-56 bg-white text-gray-800 rounded-xl shadow-xl opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-top-right">
+              *ngIf="isDropdownOpen"
+              class="absolute right-0 mt-2 w-56 bg-white text-gray-800 rounded-xl shadow-xl overflow-hidden transition-all duration-300 origin-top-right z-50"
+              (mouseleave)="closeDropdown()"
+            >
               <a routerLink="/home/me"
                  class="block px-5 py-3 rounded-t-xl hover:bg-gray-100 transition-colors duration-200">
                 Perfil
